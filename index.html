@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ElectroFix Hub - Premium Command Center</title>
+    <title>ElectroFix Hub - 3D Command Center</title>
     <style>
         :root {
-            --bg-color: #0d1520;
-            --glass-card: rgba(20, 32, 54, 0.4);
-            --glass-border: rgba(255, 255, 255, 0.12);
-            --neon-cyan: #3af0ff;
-            --neon-purple: #c084fc;
+            --bg-color: #060b13;
+            --glass-card: rgba(10, 20, 38, 0.55);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --neon-cyan: #00f0ff;
+            --neon-orange: #f59e0b;
+            --neon-green: #10b981;
             --text-main: #ffffff;
-            --text-muted: #94a3b8;
+            --text-muted: #64748b;
         }
 
         * {
@@ -24,443 +25,330 @@
 
         body {
             background-color: var(--bg-color);
-            /* Full layout ambient glow nodes */
             background-image: 
-                radial-gradient(circle at 0% 35%, rgba(58, 240, 255, 0.35) 0%, transparent 40%),
-                radial-gradient(circle at 15% 75%, rgba(192, 132, 252, 0.2) 0%, transparent 45%),
-                radial-gradient(circle at 85% 20%, rgba(58, 240, 255, 0.15) 0%, transparent 40%);
+                radial-gradient(circle at 10% 20%, rgba(0, 240, 255, 0.15) 0%, transparent 45%),
+                radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.1) 0%, transparent 50%);
             background-attachment: fixed;
             color: var(--text-main);
             min-height: 100vh;
+            padding: 2.5rem;
             display: flex;
-            overflow-x: hidden;
+            justify-content: center;
         }
 
-        /* Sidebar with intense left edge light streak */
-        .sidebar {
-            width: 280px;
-            background: linear-gradient(135deg, rgba(10, 18, 30, 0.75) 0%, rgba(6, 11, 20, 0.9) 100%);
-            border-right: 1px solid var(--glass-border);
-            backdrop-filter: blur(40px);
-            -webkit-backdrop-filter: blur(40px);
-            padding: 2.5rem 1.5rem;
-            display: flex;
-            flex-direction: column;
-            gap: 2.5rem;
-            flex-shrink: 0;
-            position: relative;
-        }
-
-        /* Sharp left-hand neon flare streak */
-        .sidebar::before {
-            content: '';
-            position: absolute;
-            top: 10%;
-            left: -40px;
-            width: 80px;
-            height: 500px;
-            background: radial-gradient(ellipse at center, rgba(58, 240, 255, 0.6) 0%, rgba(192, 132, 252, 0.25) 50%, transparent 75%);
-            filter: blur(30px);
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .sidebar-brand {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            font-size: 1.5rem;
-            font-weight: 700;
-            background: linear-gradient(to right, #ffffff, var(--neon-cyan));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            z-index: 2;
-        }
-
-        .sidebar-menu {
-            display: flex;
-            flex-direction: column;
-            gap: 0.4rem;
-            list-style: none;
-            z-index: 2;
-        }
-
-        .menu-link {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0.9rem 1.2rem;
-            color: var(--text-muted);
-            text-decoration: none;
-            border-radius: 12px;
-            font-size: 0.95rem;
-            font-weight: 500;
-            transition: all 0.3s;
-            border: 1px solid transparent;
-        }
-
-        .menu-link:hover, .menu-item.active .menu-link {
-            color: #ffffff;
-            background: rgba(255, 255, 255, 0.06);
-            border-color: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-        }
-
-        .status-pill {
-            background: rgba(58, 240, 255, 0.15);
-            color: var(--neon-cyan);
-            border: 1px solid rgba(58, 240, 255, 0.3);
-            padding: 0.15rem 0.5rem;
-            font-size: 0.72rem;
-            border-radius: 6px;
-            font-weight: 600;
-            box-shadow: 0 0 8px rgba(58, 240, 255, 0.3);
-        }
-
-        /* Workspace main grid canvas */
-        .workspace-canvas {
-            flex: 1;
-            padding: 3.5rem;
+        .dashboard-container {
+            width: 100%;
+            max-width: 1400px;
             display: flex;
             flex-direction: column;
             gap: 2rem;
-            max-width: 1400px;
-            width: 100%;
         }
 
-        .header-block h1 {
-            font-size: 2.5rem;
+        /* Top Header Navigation Panel */
+        .header-panel {
+            background: rgba(10, 20, 38, 0.4);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .brand-title {
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            color: #ffffff;
+            text-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+        }
+
+        .node-status-badge {
+            font-size: 0.78rem;
             font-weight: 700;
-            letter-spacing: -0.03em;
-        }
-
-        .header-block .node-status {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            margin-top: 0.4rem;
+            letter-spacing: 0.06em;
+            color: var(--neon-cyan);
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            text-transform: uppercase;
         }
 
-        .node-pulse {
-            width: 8px;
-            height: 8px;
+        .pulse-dot {
+            width: 6px;
+            height: 6px;
             background-color: var(--neon-cyan);
             border-radius: 50%;
             box-shadow: 0 0 12px var(--neon-cyan);
         }
 
-        .dashboard-grid {
+        /* Metrics Row Matrix Grid */
+        .metrics-grid {
             display: grid;
-            grid-template-columns: 1.6fr 1fr;
+            grid-template-columns: repeat(3, 1fr);
             gap: 2rem;
         }
 
-        .left-column, .right-column {
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-        }
-
-        /* High fidelity frosted glass panels */
-        .glass-panel {
+        .metric-card {
             background: var(--glass-card);
             border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 2rem;
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 2.2rem;
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.3s, transform 0.3s;
         }
 
-        .panel-heading {
-            font-size: 1.1rem;
-            font-weight: 600;
+        .metric-card:hover {
+            border-color: rgba(0, 240, 255, 0.3);
+            transform: translateY(-4px);
+        }
+
+        .metric-icon {
+            width: 32px;
+            height: 32px;
             margin-bottom: 1.5rem;
-            color: rgba(255, 255, 255, 0.95);
-        }
-
-        .stats-pair {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .metric-label {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            color: var(--text-muted);
+            font-size: 0.8rem;
             font-weight: 600;
-            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
         }
 
         .metric-value {
-            font-size: 3.2rem;
+            font-size: 3.5rem;
             font-weight: 700;
-            background: linear-gradient(to bottom, #ffffff, #cbd5e1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.02em;
+            color: #ffffff;
+            line-height: 1;
+            margin-bottom: 1.5rem;
         }
 
-        /* Glowing Tech Grid Block */
-        .time-box {
-            background: linear-gradient(135deg, rgba(58, 240, 255, 0.08) 0%, rgba(15, 23, 42, 0.6) 100%);
-            border: 1px solid rgba(58, 240, 255, 0.25);
-            border-radius: 20px;
-            padding: 2rem;
-            position: relative;
+        /* Glowing Neon Progress Bar Indicator */
+        .progress-track {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 2px;
             overflow: hidden;
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3), 0 0 30px rgba(58, 240, 255, 0.05);
         }
 
-        /* Tech Blueprint Grid Backdrop lines */
-        .time-box::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-image: 
-                linear-gradient(rgba(58, 240, 255, 0.05) 1px, transparent 1px), 
-                linear-gradient(90deg, rgba(58, 240, 255, 0.05) 1px, transparent 1px);
-            background-size: 14px 14px;
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #0284c7, var(--neon-cyan));
+            box-shadow: 0 0 12px var(--neon-cyan);
+            border-radius: 2px;
         }
 
-        .time-content {
-            position: relative;
-            z-index: 2;
+        /* Data Stream Glass Table Layout */
+        .stream-panel {
+            background: var(--glass-card);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2.2rem;
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
         }
 
-        /* Device Showcase with 3D Float Cards */
-        .device-showcase {
+        .panel-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 1rem;
+            margin-bottom: 2rem;
         }
 
-        .premium-device-card {
-            flex: 1;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.02) 100%);
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            padding: 1.25rem 0.75rem;
-            text-align: center;
-            backdrop-filter: blur(15px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.35);
-            animation: bounce-floating 5s infinite ease-in-out;
+        .panel-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
         }
 
-        .premium-device-card:hover {
-            border-color: var(--neon-cyan);
-            box-shadow: 0 0 25px rgba(58, 240, 255, 0.3);
-            transform: translateY(-5px);
+        .action-btn {
+            background: transparent;
+            border: 1px solid rgba(0, 240, 255, 0.4);
+            color: var(--neon-cyan);
+            padding: 0.6rem 1.2rem;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
         }
 
-        .premium-device-card svg {
-            width: 34px;
-            height: 34px;
-            margin-bottom: 0.5rem;
-            filter: drop-shadow(0 0 8px rgba(58, 240, 255, 0.4));
+        .action-btn:hover {
+            background: rgba(0, 240, 255, 0.1);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
         }
 
-        .premium-device-card p {
-            font-size: 0.72rem;
+        /* Custom Structured Table Grid */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .data-table th {
+            padding: 1rem 1.5rem;
+            font-size: 0.75rem;
             font-weight: 600;
             text-transform: uppercase;
+            letter-spacing: 0.08em;
             color: var(--text-muted);
-            letter-spacing: 0.05em;
-        }
-
-        .dev-1 { animation-delay: 0s; }
-        .dev-2 { animation-delay: 1.5s; }
-        .dev-3 { animation-delay: 3s; }
-
-        /* Stream Rows UI */
-        .stream-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1.2rem;
-        }
-
-        .stream-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            padding-bottom: 1rem;
         }
 
-        .stream-row:last-child {
-            border-bottom: none;
-            padding-bottom: 0;
-        }
-
-        .stream-info {
-            display: flex;
-            align-items: center;
-            gap: 0.85rem;
+        .data-table td {
+            padding: 1.25rem 1.5rem;
             font-size: 0.92rem;
+            color: rgba(255, 255, 255, 0.85);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
         }
 
-        .stream-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: var(--neon-cyan);
-            box-shadow: 0 0 10px var(--neon-cyan);
-        }
-
-        .stream-time {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
-
-        /* Accordion Element Styles */
-        .faq-wrapper {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .faq-node {
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            padding-bottom: 1rem;
-        }
-
-        .faq-node:last-child {
+        .data-table tr:last-child td {
             border-bottom: none;
-            padding-bottom: 0;
         }
 
-        .faq-trigger {
-            width: 100%;
-            background: transparent;
-            border: none;
-            color: #ffffff;
-            font-size: 0.95rem;
-            text-align: left;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .faq-trigger::after {
-            content: '＋';
-            color: var(--neon-cyan);
-        }
-
-        .faq-node.open .faq-trigger::after {
-            content: '－';
-        }
-
-        .faq-panel {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-out;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            line-height: 1.5;
-        }
-
-        .faq-panel p {
-            padding-top: 0.6rem;
-        }
-
-        /* Registration Gateway Components */
-        .registration-form {
-            display: flex;
-            flex-direction: column;
-            gap: 1.25rem;
-        }
-
-        .input-wrapper {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .input-wrapper label {
-            font-size: 0.82rem;
-            color: var(--text-muted);
-            font-weight: 500;
-        }
-
-        .form-field {
-            width: 100%;
-            background: rgba(10, 16, 26, 0.6);
-            border: 1px solid var(--glass-border);
-            border-radius: 10px;
-            padding: 0.9rem 1.1rem;
-            color: #ffffff;
-            font-size: 0.92rem;
-            transition: border-color 0.3s;
-        }
-
-        .form-field:focus {
-            outline: none;
-            border-color: var(--neon-cyan);
-        }
-
-        .submit-btn {
-            background: linear-gradient(135deg, #0284c7 0%, var(--neon-cyan) 100%);
-            color: #ffffff;
-            border: none;
-            padding: 1rem;
-            border-radius: 12px;
-            font-size: 0.95rem;
+        /* Device Badges */
+        .badge {
+            display: inline-block;
+            padding: 0.35rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
             font-weight: 600;
-            cursor: pointer;
-            box-shadow: 0 10px 20px rgba(2, 132, 199, 0.3);
-            transition: transform 0.2s, box-shadow 0.2s;
+            background: rgba(0, 240, 255, 0.1);
+            color: var(--neon-cyan);
+            border: 1px solid rgba(0, 240, 255, 0.15);
         }
 
-        .submit-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 12px 25px rgba(58, 240, 255, 0.4);
+        .code-cell {
+            font-family: monospace;
+            color: var(--text-muted);
         }
 
-        @keyframes bounce-floating {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-6px); }
+        /* Status Indicators */
+        .status-analyzing {
+            color: var(--neon-orange);
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(245, 158, 11, 0.2);
         }
 
-        @media (max-width: 1200px) {
-            body { flex-direction: column; }
-            .sidebar { width: 100%; height: auto; }
-            .sidebar::before { display: none; }
-            .dashboard-grid { grid-template-columns: 1fr; }
-            .workspace-canvas { padding: 2rem; }
+        .status-ready {
+            color: var(--neon-green);
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(16, 185, 129, 0.2);
+        }
+
+        @media (max-width: 968px) {
+            .metrics-grid { grid-template-columns: 1fr; }
+            body { padding: 1rem; }
+            .data-table th, .data-table td { padding: 0.75rem 0.5rem; }
         }
     </style>
 </head>
 <body>
 
-    <nav class="sidebar">
-        <div class="sidebar-brand">💎 Premium</div>
-        <ul class="sidebar-menu">
-            <li class="menu-item active"><a href="#" class="menu-link">Command Center <span class="status-pill">Active</span></a></li>
-            <li class="menu-item"><a href="index.html" class="menu-link">Submission Hub</a></li>
-            <li class="menu-item"><a href="#" class="menu-link">Common Fixes</a></li>
-            <li class="menu-item"><a href="#" class="menu-link">Service Pricing</a></li>
-            <li class="menu-item"><a href="#" class="menu-link">FAQ</a></li>
-            <li class="menu-item"><a href="#" class="menu-link">Support</a></li>
-        </ul>
-    </nav>
-
-    <main class="workspace-canvas">
+    <div class="dashboard-container">
         
-        <div class="header-block">
-            <h1>ElectroFix // Command_Center</h1>
-            <div class="node-status"><div class="node-pulse"></div> Diagnostics Node: Active</div>
-        </div>
+        <header class="header-panel">
+            <div class="brand-title">ELECTROFIX // COMMAND_CENTER</div>
+            <div class="node-status-badge">
+                <div class="pulse-dot"></div>
+                Diagnostics Node: Active
+            </div>
+        </header>
 
-        <div class="dashboard-grid">
+        <section class="metrics-grid">
             
-            <div class="left-column">
-                
-                <div class="stats-pair">
-                    <div class="glass-
+            <div class="metric-card" style="border-color: rgba(0, 240, 255, 0.25);">
+                <div class="metric-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="url(#cyan-grad)" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                </div>
+                <div class="metric-label">Active Repair Queues</div>
+                <div class="metric-value">24</div>
+                <div class="progress-track">
+                    <div class="progress-fill" style="width: 42%;"></div>
+                </div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--neon-cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M22 12h-4M2 12h4M12 2v4M12 22v4"/></svg>
+                </div>
+                <div class="metric-label">Diagnostics Solved</div>
+                <div class="metric-value">142</div>
+                <div class="progress-track">
+                    <div class="progress-fill" style="width: 68%;"></div>
+                </div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--neon-cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"/></svg>
+                </div>
+                <div class="metric-label">Avg. Repair Time</div>
+                <div class="metric-value">34m</div>
+                <div class="progress-track">
+                    <div class="progress-fill" style="width: 55%;"></div>
+                </div>
+            </div>
+
+        </section>
+
+        <section class="stream-panel">
+            <div class="panel-header">
+                <div class="panel-title">Incoming Diagnostics Stream</div>
+                <button class="action-btn">+ File New Issue</button>
+            </div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Device Type</th>
+                        <th>Reported System Fault</th>
+                        <th>Node Code</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="badge">Laptop</span></td>
+                        <td>Static shorts following hardware power surge</td>
+                        <td class="code-cell">#N-4089</td>
+                        <td><span class="status-analyzing">Analyzing...</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge">Smartphone</span></td>
+                        <td>Boot loop sequence triggered after battery drain</td>
+                        <td class="code-cell">#N-4088</td>
+                        <td><span class="status-ready">Ready</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+    </div>
+
+    <svg style="width:0;height:0;position:absolute;">
+        <defs>
+            <linearGradient id="cyan-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#fff" />
+                <stop offset="100%" stop-color="#00f0ff" />
+            </linearGradient>
+        </defs>
+    </svg>
+
+</body>
+</html>
