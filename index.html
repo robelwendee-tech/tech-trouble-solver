@@ -13,6 +13,8 @@
             --neon-purple: #c084fc;
             --text-main: #ffffff;
             --text-muted: #94a3b8;
+            --telebirr-blue: #0066cc;
+            --cbe-purple: #4a148c;
         }
 
         * {
@@ -177,6 +179,80 @@
             color: #ffffff;
         }
 
+        /* --- ETHIOPIAN PAYMENTS OVERLAY INTEGRATION --- */
+        .payment-methods-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .payment-node-option {
+            background: rgba(13, 22, 38, 0.6);
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+            padding: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .payment-node-option:hover {
+            border-color: var(--neon-cyan);
+            transform: scale(1.01);
+            background: rgba(20, 35, 60, 0.8);
+        }
+
+        .pay-brand-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .pay-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 0.85rem;
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .telebirr-theme {
+            background: linear-gradient(135deg, #0070f3 0%, #00df89 100%);
+            color: #ffffff;
+        }
+
+        .cbe-theme {
+            background: linear-gradient(135deg, #7c3aed 0%, #2563eb 100%);
+            color: #ffffff;
+        }
+
+        .pay-details h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .pay-details p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.15rem;
+        }
+
+        .action-arrow {
+            color: var(--neon-cyan);
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
         /* --- DIAGNOSTICS STREAM LIST --- */
         .stream-container {
             display: flex;
@@ -303,61 +379,7 @@
             letter-spacing: 0.03em;
         }
 
-        /* --- SECURE ENTRY PORTAL REGISTRATION --- */
-        .entry-portal {
-            display: flex;
-            flex-direction: column;
-            gap: 1.2rem;
-        }
-
-        .entry-input-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.4rem;
-        }
-
-        .entry-input-group label {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-        }
-
-        .entry-field {
-            width: 100%;
-            background: rgba(8, 14, 26, 0.5);
-            border: 1px solid var(--glass-border);
-            border-radius: 10px;
-            padding: 0.8rem 1rem;
-            color: #ffffff;
-            font-size: 0.9rem;
-        }
-
-        .entry-field:focus {
-            outline: none;
-            border-color: var(--neon-cyan);
-        }
-
-        .portal-submit {
-            background: linear-gradient(135deg, #0284c7 0%, #00d8f6 100%);
-            color: #ffffff;
-            border: none;
-            padding: 0.9rem;
-            border-radius: 10px;
-            font-size: 0.92rem;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: 0 8px 20px rgba(2, 132, 199, 0.25);
-            transition: all 0.2s;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .portal-submit:hover {
-            box-shadow: 0 10px 25px rgba(61, 240, 255, 0.35);
-        }
-
-        /* Blueprints Backdrop Canvas Box */
+        /* Blueprint Backdrop Box */
         .blueprint-container {
             background: linear-gradient(135deg, rgba(61, 240, 255, 0.08) 0%, rgba(15, 23, 42, 0.5) 100%);
             border: 1px solid rgba(61, 240, 255, 0.25);
@@ -498,18 +520,32 @@
                 </div>
 
                 <div class="glass-card">
-                    <div class="card-title">New User Registration</div>
-                    <form class="entry-portal" onsubmit="event.preventDefault();">
-                        <div class="entry-input-group">
-                            <label>Username</label>
-                            <input type="text" class="entry-field">
+                    <div class="card-title">Secure Gateway Payment</div>
+                    <div class="payment-methods-grid">
+                        
+                        <div class="payment-node-option" onclick="alert('Redirecting to Telebirr Checkout Portal...')">
+                            <div class="pay-brand-meta">
+                                <div class="pay-avatar telebirr-theme">tele</div>
+                                <div class="pay-details">
+                                    <h4>Telebirr Mobile Pay</h4>
+                                    <p>Instant digital wallet checkout</p>
+                                </div>
+                            </div>
+                            <div class="action-arrow">→</div>
                         </div>
-                        <div class="entry-input-group">
-                            <label>Email</label>
-                            <input type="email" class="entry-field">
+
+                        <div class="payment-node-option" onclick="alert('Redirecting to Commercial Bank of Ethiopia (CBE Birr) Gateway...')">
+                            <div class="pay-brand-meta">
+                                <div class="pay-avatar cbe-theme">cbe</div>
+                                <div class="pay-details">
+                                    <h4>CBE Birr / CBE Mobile</h4>
+                                    <p>Direct bank transfer confirmation</p>
+                                </div>
+                            </div>
+                            <div class="action-arrow">→</div>
                         </div>
-                        <button type="submit" class="portal-submit">Execute Secure Registration</button>
-                    </form>
+
+                    </div>
                 </div>
 
             </div>
