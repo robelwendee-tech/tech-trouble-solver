@@ -6,286 +6,561 @@
     <title>ElectroFix Hub - Premium Dashboard</title>
     <style>
         :root {
-            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #020617 100%);
-            --glass-bg: rgba(30, 41, 59, 0.4);
+            --bg-base: #0b0f19;
+            --glass-bg: rgba(22, 32, 53, 0.45);
             --glass-border: rgba(255, 255, 255, 0.08);
+            --accent-cyan: #38bdf8;
+            --accent-purple: #818cf8;
             --accent-glow: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
         body {
-            background: var(--bg-gradient);
-            color: var(--text-primary);
+            background-color: var(--bg-base);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(129, 140, 248, 0.08) 0%, transparent 40%);
+            color: var(--text-main);
             min-height: 100vh;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 2rem;
             overflow-x: hidden;
         }
 
-        /* Perspective space setup */
-        .dashboard-container {
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 260px;
+            background: rgba(15, 23, 42, 0.4);
+            border-right: 1px solid var(--glass-border);
+            backdrop-filter: blur(20px);
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+            z-index: 10;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            background: linear-gradient(to right, #fff, var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .menu-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            list-style: none;
+        }
+
+        .menu-item a {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.8rem 1rem;
+            color: var(--text-sub);
+            text-decoration: none;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .menu-item a:hover, .menu-item.active a {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .badge-active {
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+            padding: 0.15rem 0.5rem;
+            font-size: 0.75rem;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        /* Main Perspective Canvas Layout */
+        .main-content {
+            flex: 1;
+            padding: 2.5rem;
+            perspective: 1500px;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
             width: 100%;
-            max-width: 1000px;
-            perspective: 1200px;
         }
 
-        /* Main Floating Dashboard Structure */
-        .glass-panel {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 3rem;
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        /* 3D Main Scene Wrapper */
+        .scene-3d {
             transform-style: preserve-3d;
-            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
         }
 
-        /* Elegant Minimalist Header */
-        header {
+        /* Command Top Bar */
+        .command-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 3rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            padding-bottom: 1.5rem;
-        }
-
-        header h1 {
-            font-size: 1.75rem;
-            font-weight: 600;
-            letter-spacing: -0.02em;
-        }
-
-        .status-badge {
-            background: rgba(56, 189, 248, 0.1);
-            border: 1px solid rgba(56, 189, 248, 0.2);
-            padding: 0.5rem 1rem;
-            border-radius: 99px;
-            font-size: 0.85rem;
-            color: #38bdf8;
-            font-weight: 500;
-        }
-
-        /* 3D Grid Elements */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 3rem;
-        }
-
-        .stat-card {
-            background: rgba(15, 23, 42, 0.3);
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            padding: 1.75rem;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            transform: translateZ(0px);
-        }
-
-        /* Clean 3D Lift Action */
-        .stat-card:hover {
             transform: translateZ(30px);
-            background: rgba(30, 41, 59, 0.6);
-            border-color: rgba(56, 189, 248, 0.3);
-            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.3);
         }
 
-        .stat-label {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            font-weight: 500;
+        .command-title h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: -0.04em;
+        }
+
+        .command-sub {
+            color: var(--text-sub);
+            font-size: 0.95rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Flex Row Layer containing Stats & Floating Showcase Hardware */
+        .row-showcase {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .stats-subgrid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 1.75rem;
+            backdrop-filter: blur(16px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            transform-style: preserve-3d;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(56, 189, 248, 0.3);
+            box-shadow: 0 30px 60px rgba(56, 189, 248, 0.08);
+        }
+
+        .card-lbl {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-sub);
+            font-weight: 600;
             margin-bottom: 0.5rem;
         }
 
-        .stat-value {
-            font-size: 2.25rem;
+        .card-num {
+            font-size: 2.5rem;
             font-weight: 700;
-            letter-spacing: -0.03em;
-            margin-bottom: 0.75rem;
+            letter-spacing: -0.02em;
         }
 
-        .progress-track {
-            width: 100%;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 2px;
-            overflow: hidden;
+        /* Premium Device Canvas Showcase */
+        .hardware-canvas {
+            position: relative;
+            height: 220px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transform: translateZ(50px);
         }
 
-        .progress-bar {
-            height: 100%;
-            background: var(--accent-glow);
-            width: 0%;
-            transition: width 1s ease-out;
+        .floating-device {
+            position: absolute;
+            max-width: 100%;
+            height: auto;
+            filter: drop-shadow(0 25px 35px rgba(0,0,0,0.6));
+            animation: float-prime 5s infinite ease-in-out;
         }
 
-        /* Stream/Log Table Section */
-        .data-section h2 {
+        /* Splitting into Laptop, Console, Phone positioning rules */
+        .device-laptop { width: 170px; left: 10px; top: 10px; animation-delay: 0s; }
+        .device-console { width: 140px; right: 20px; bottom: 10px; animation-delay: 1.5s; }
+        .device-phone { width: 65px; left: 190px; bottom: 40px; animation-delay: 0.7s; }
+
+        /* Two Column Dynamic Module Frame Layout */
+        .dashboard-modules {
+            display: grid;
+            grid-template-columns: 1.6fr 1fr;
+            gap: 2rem;
+        }
+
+        .module-block {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .module-block h3 {
             font-size: 1.2rem;
             font-weight: 600;
-            margin-bottom: 1.25rem;
+            color: #fff;
         }
 
-        .stream-list {
+        /* Stream Rows UI */
+        .stream-box {
             display: flex;
             flex-direction: column;
             gap: 0.75rem;
         }
 
-        .stream-row {
+        .stream-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(15, 23, 42, 0.2);
+            background: rgba(22, 32, 53, 0.25);
             border: 1px solid rgba(255, 255, 255, 0.03);
-            padding: 1rem 1.5rem;
-            border-radius: 12px;
+            padding: 1.1rem 1.5rem;
+            border-radius: 14px;
             font-size: 0.95rem;
-            transition: background 0.2s;
+            transition: all 0.2s;
         }
 
-        .stream-row:hover {
-            background: rgba(15, 23, 42, 0.4);
+        .stream-item:hover {
+            background: rgba(22, 32, 53, 0.5);
+            border-color: rgba(255,255,255,0.06);
         }
 
-        .device-info {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .type-tag {
+        .dev-badge {
             font-size: 0.75rem;
-            text-transform: uppercase;
             font-weight: 600;
-            letter-spacing: 0.05em;
-            color: var(--text-secondary);
-            background: rgba(255, 255, 255, 0.05);
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
             padding: 0.25rem 0.5rem;
-            border-radius: 4px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 6px;
+            color: var(--text-sub);
+            margin-right: 0.75rem;
         }
 
-        .row-status {
-            font-size: 0.85rem;
+        /* Premium Accordion FAQ Section UI */
+        .faq-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .faq-item {
+            background: rgba(22, 32, 53, 0.25);
+            border: 1px solid rgba(255,255,255,0.03);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .faq-trigger {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: var(--text-main);
+            padding: 1.1rem 1.5rem;
+            text-align: left;
+            font-size: 0.95rem;
             font-weight: 500;
-            color: #10b981;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        /* Smooth Tilt Script Integration triggers */
-        @media (max-width: 768px) {
-            padding: 1rem;
-            .glass-panel { padding: 1.5rem; }
+        .faq-trigger:after {
+            content: '＋';
+            font-size: 0.85rem;
+            color: var(--accent-cyan);
+            transition: transform 0.3s;
+        }
+
+        .faq-item.open .faq-trigger:after {
+            content: '－';
+        }
+
+        .faq-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background: rgba(15, 23, 42, 0.2);
+            color: var(--text-sub);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .faq-content p {
+            padding: 0 1.5rem 1.25rem 1.5rem;
+        }
+
+        /* Premium Form Register Container card */
+        .auth-widget {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .auth-tabs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: rgba(15, 23, 42, 0.4);
+            border-radius: 10px;
+            padding: 0.25rem;
+            border: 1px solid rgba(255,255,255,0.03);
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-sub);
+            padding: 0.5rem;
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background: var(--glass-bg);
+            color: #fff;
+            border: 1px solid var(--glass-border);
+        }
+
+        .input-box {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            color: #fff;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .input-box:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.15);
+        }
+
+        .btn-action {
+            width: 100%;
+            background: var(--accent-glow);
+            border: none;
+            color: #fff;
+            padding: 0.85rem;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(129, 140, 248, 0.2);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(56, 189, 248, 0.3);
+        }
+
+        /* Sophisticated Animation Framework profiles */
+        @keyframes float-prime {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(2deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        @media (max-width: 1024px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; }
+            .dashboard-modules, .row-showcase { grid-template-columns: 1fr; }
+            .hardware-canvas { display: none; }
         }
     </style>
 </head>
 <body>
 
-    <div class="dashboard-container">
-        <div class="glass-panel" id="panel">
-            
-            <header>
-                <h1>System Hub</h1>
-                <div class="status-badge">Diagnostics: Online</div>
-            </header>
+    <nav class="sidebar">
+        <div class="brand">💎 Premium</div>
+        <ul class="menu-list">
+            <li class="menu-item active"><a href="#">Command Center <span class="badge-active">Active</span></a></li>
+            <li class="menu-item"><a href="index.html">Submission Hub</a></li>
+            <li class="menu-item"><a href="#">Common Fixes</a></li>
+            <li class="menu-item"><a href="#">Service Pricing</a></li>
+            <li class="menu-item"><a href="#">FAQ</a></li>
+            <li class="menu-item"><a href="#">Support</a></li>
+        </ul>
+    </nav>
 
-            <div class="stats-grid">
-                
-                <div class="stat-card">
-                    <div class="stat-label">Active Queues</div>
-                    <div class="stat-value">18</div>
-                    <div class="progress-track"><div class="progress-bar" style="width: 60%;"></div></div>
+    <main class="main-content">
+        <div class="scene-3d" id="scene-canvas">
+
+            <div class="command-header">
+                <div class="command-title">
+                    <h2>ElectroFix // Command_Center</h2>
+                    <div class="command-sub">Diagnostics Node: Active</div>
                 </div>
-
-                <div class="stat-card">
-                    <div class="stat-label">Solved Tickets</div>
-                    <div class="stat-value">142</div>
-                    <div class="progress-track"><div class="progress-bar" style="width: 85%;"></div></div>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-label">Response Index</div>
-                    <div class="stat-value">99.2%</div>
-                    <div class="progress-track"><div class="progress-bar" style="width: 99%;"></div></div>
-                </div>
-
             </div>
 
-            <div class="data-section">
-                <h2>Live Activity Stream</h2>
-                <div class="stream-list">
-                    
-                    <div class="stream-row">
-                        <div class="device-info">
-                            <span class="type-tag">Laptop</span>
-                            <span>Power rails failing check sequence</span>
-                        </div>
-                        <span class="row-status" style="color: #f59e0b;">Reviewing</span>
+            <div class="row-showcase">
+                <div class="stats-subgrid">
+                    <div class="glass-card">
+                        <div class="card-lbl">Active Repair Queues</div>
+                        <div class="card-num">24</div>
                     </div>
-
-                    <div class="stream-row">
-                        <div class="device-info">
-                            <span class="type-tag">Smartphone</span>
-                            <span>Display assembly replacement config</span>
-                        </div>
-                        <span class="row-status">Completed</span>
+                    <div class="glass-card">
+                        <div class="card-lbl">Diagnostics Solved</div>
+                        <div class="card-num">142</div>
                     </div>
-
-                    <div class="stream-row">
-                        <div class="device-info">
-                            <span class="type-tag">Console</span>
-                            <span>APU thermal compound dry replacement</span>
-                        </div>
-                        <span class="row-status">Completed</span>
+                    <div class="glass-card">
+                        <div class="card-lbl">Avg. Repair Time</div>
+                        <div class="card-num" style="color: var(--accent-cyan)">34m</div>
                     </div>
-
                 </div>
+
+                <div class="hardware-canvas">
+                    <img src="https://i.ibb.co/Vv3Y7wG/laptop-mock.png" alt="Laptop" class="floating-device device-laptop" onerror="this.src='https://images.unsplash.com/photo-1593642632823-8f785ba67e45?auto=format&fit=crop&w=300&q=80'">
+                    <img src="https://i.ibb.co/mSRfWwM/phone-mock.png" alt="Smartphone" class="floating-device device-phone" onerror="this.src='https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=200&q=80'">
+                    <img src="https://i.ibb.co/6wX2mXY/console-mock.png" alt="Console" class="floating-device device-console" onerror="this.src='https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?auto=format&fit=crop&w=300&q=80'">
+                </div>
+            </div>
+
+            <div class="dashboard-modules">
+                
+                <div class="module-block">
+                    <h3>Incoming Diagnostics Stream</h3>
+                    <div class="stream-box">
+                        <div class="stream-item">
+                            <div><span class="dev-badge">Laptop</span>Static shorts following power surge</div>
+                            <span style="color: #f59e0b; font-weight:500;">Analyzing</span>
+                        </div>
+                        <div class="stream-item">
+                            <div><span class="dev-badge">Smartphone</span>Boot loop sequence error configuration</div>
+                            <span style="color: #10b981; font-weight:500;">Ready</span>
+                        </div>
+                    </div>
+
+                    <h3 style="margin-top: 1rem;">Frequently Asked Questions</h3>
+                    <div class="faq-stack">
+                        <div class="faq-item">
+                            <button class="faq-trigger" onclick="toggleFaq(this)">What is the typical diagnostic review period?</button>
+                            <div class="faq-content">
+                                <p>Standard diagnostics complete autonomously within 34 minutes of digital packet analysis and entry logs logging onto the stream array.</p>
+                            </div>
+                        </div>
+                        <div class="faq-item">
+                            <button class="faq-trigger" onclick="toggleFaq(this)">How secure is my telemetry file upload data?</button>
+                            <div class="faq-content">
+                                <p>All data and graphic diagnostic uploads process directly across secure localized end-to-end cloud infrastructure parameters natively monitored safely.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="module-block">
+                    <h3>User Gate Access</h3>
+                    <div class="glass-card auth-widget">
+                        <div class="auth-tabs">
+                            <button class="tab-btn active" onclick="switchAuthTab(this, 'register')">Create Account</button>
+                            <button class="tab-btn" onclick="switchAuthTab(this, 'login')">Sign In</button>
+                        </div>
+                        <div id="auth-fields" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                            <input type="text" placeholder="Username ID token" class="input-box">
+                            <input type="email" placeholder="Secure Email link address" class="input-box">
+                            <input type="password" placeholder="Account Security Key code" class="input-box">
+                        </div>
+                        <button class="btn-action" id="auth-submit-btn">Execute Secure Registration</button>
+                    </div>
+                </div>
+
             </div>
 
         </div>
-    </div>
+    </main>
 
     <script>
-        const panel = document.getElementById('panel');
-        const container = document.querySelector('.dashboard-container');
+        const scene = document.getElementById('scene-canvas');
+        const container = document.querySelector('.main-content');
 
-        // Smooth subtle 3D glass mouse follow effect
+        // Elegant Mouse-tracking Smooth 3D Gyro Perspective Math
         container.addEventListener('mousemove', (e) => {
-            const rect = container.getBoundingClientRect();
-            const x = e.clientX - rect.left - (rect.width / 2);
-            const y = e.clientY - rect.top - (rect.height / 2);
+            const bound = container.getBoundingClientRect();
+            const mouseX = e.clientX - bound.left - (bound.width / 2);
+            const mouseY = e.clientY - bound.top - (bound.height / 2);
             
-            // Subtle premium movement parameters (max 6 degree tilt)
-            const tiltX = -(y / rect.height) * 12;
-            const tiltY = (x / rect.width) * 12;
+            // Subtle, premium 3D tilt tracking boundaries 
+            const rotX = -(mouseY / bound.height) * 8;
+            const rotY = (mouseX / bound.width) * 8;
 
-            panel.style.transform = `rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+            scene.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
         });
 
         container.addEventListener('mouseleave', () => {
-            panel.style.transform = 'rotateX(0deg) rotateY(0deg)';
+            scene.style.transform = 'rotateX(0deg) rotateY(0deg)';
         });
 
-        // Trigger loading animations
-        window.addEventListener('DOMContentLoaded', () => {
-            setTimeout(() => {
-                document.querySelectorAll('.progress-bar').forEach(bar => {
-                    bar.style.width = bar.style.width; 
+        // Interactive Accordion Controller logic
+        function toggleFaq(btn) {
+            const item = btn.parentElement;
+            const content = btn.nextElementSibling;
+            
+            if(item.classList.contains('open')) {
+                item.classList.remove('open');
+                content.style.maxHeight = null;
+            } else {
+                // Close other opened items
+                document.querySelectorAll('.faq-item').forEach(el => {
+                    el.classList.remove('open');
+                    el.querySelector('.faq-content').style.maxHeight = null;
                 });
-            }, 150);
-        });
+                item.classList.add('open');
+                content.style.maxHeight = content.scrollHeight + "px";
+            }
+        }
+
+        // Functional Tab Matrix Switcher 
+        function switchAuthTab(btn, mode) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            const fieldsBlock = document.getElementById('auth-fields');
+            const submitBtn = document.getElementById('auth-submit-btn');
+            
+            if(mode === 'login') {
+                fieldsBlock.innerHTML = `
+                    <input type="email" placeholder="Secure Email link address" class="input-box">
+                    <input type="password" placeholder="Account Security Key code" class="input-box">
+                `;
+                submitBtn.innerText = "Authorize System Login";
+            } else {
+                fieldsBlock.innerHTML = `
+                    <input type="text" placeholder="Username ID token" class="input-box">
+                    <input type="email" placeholder="Secure Email link address" class="input-box">
+                    <input type="password" placeholder="Account Security Key code" class="input-box">
+                `;
+                submitBtn.innerText = "Execute Secure Registration";
+            }
+        }
     </script>
 </body>
 </html>
