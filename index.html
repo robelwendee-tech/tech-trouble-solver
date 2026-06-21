@@ -3,116 +3,308 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TechFix - Electronics Troubleshooting Hub</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <title>ElectroFix Hub - Expert Tech Troubleshooting</title>
     <style>
         :root {
-            --primary: #2563eb;
-            --dark: #1e293b;
-            --light: #f8fafc;
-            --accent: #ef4444;
+            --bg-dark: #0f172a;
+            --card-bg: #1e293b;
+            --accent-blue: #38bdf8;
+            --accent-glow: #0284c7;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--light); color: var(--dark); line-height: 1.6; }
-        header { background: var(--dark); color: white; padding: 1.5rem; text-align: center; }
-        header h1 { margin-bottom: 0.5rem; color: #60a5fa; }
-        
-        .container { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
-        
-        /* Device Categories */
-        .categories { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 3rem; }
-        .card { background: white; padding: 1.5rem; border-radius: 8px; text-align: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); cursor: pointer; transition: transform 0.2s; }
-        .card:hover { transform: translateY(-5px); }
-        .card i { font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem; }
-        
-        /* Quick Fixes Section */
-        .quick-fixes { background: white; padding: 2rem; border-radius: 8px; margin-bottom: 3rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
-        .quick-fixes h2 { margin-bottom: 1rem; color: var(--dark); border-bottom: 2px solid var(--primary); padding-bottom: 0.5rem; }
-        .faq-item { margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #e2e8f0; }
-        .faq-item h3 { color: var(--primary); font-size: 1.1rem; margin-bottom: 0.25rem; }
 
-        /* Upload Form */
-        .upload-section { background: white; padding: 2.5rem; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
-        .upload-section h2 { margin-bottom: 1rem; }
-        .form-group { margin-bottom: 1.25rem; }
-        label { display: block; margin-bottom: 0.5rem; font-weight: 600; }
-        input[type="text"], select, textarea { width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 1rem; }
-        textarea { resize: vertical; min-height: 120px; }
-        input[type="file"] { background: #f1f5f9; padding: 0.75rem; border-radius: 6px; width: 100%; border: 2px dashed #cbd5e1; }
-        
-        button { background: var(--primary); color: white; border: none; padding: 0.75rem 1.5rem; font-size: 1rem; font-weight: 600; border-radius: 6px; cursor: pointer; width: 100%; transition: background 0.2s; }
-        button:hover { background: #1d4ed8; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        /* Ambient Glow Background Effects */
+        .glow-orb {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, rgba(0,0,0,0) 70%);
+            top: -100px;
+            z-index: -1;
+        }
+
+        header {
+            text-align: center;
+            padding: 3rem 1rem 1.5rem 1rem;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -0.05em;
+            background: linear-gradient(to right, #ffffff, var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        main {
+            width: 100%;
+            max-width: 650px;
+            padding: 0 1.5rem 4rem 1.5rem;
+        }
+
+        /* Glassmorphic Container Card */
+        .main-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(8px);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control {
+            width: 100%;
+            background-color: #0f172a;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            color: var(--text-main);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
+        }
+
+        select.form-control {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1.25rem;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        /* Custom Modern File Upload */
+        .file-upload-wrapper {
+            position: relative;
+            border: 2px dashed var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            background-color: rgba(15, 23, 42, 0.5);
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+        }
+
+        .file-upload-wrapper:hover {
+            border-color: var(--accent-blue);
+        }
+
+        .file-upload-wrapper input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .upload-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-muted);
+        }
+
+        .file-name-display {
+            font-size: 0.85rem;
+            color: var(--accent-blue);
+            margin-top: 0.5rem;
+            font-weight: 500;
+        }
+
+        /* Glowing Submit Button */
+        .btn-submit {
+            width: 100%;
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 1rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+            margin-top: 1rem;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(56, 189, 248, 0.4);
+            background: linear-gradient(135deg, #0369a1 0%, #0284c7 100%);
+        }
+
+        .btn-submit:active {
+            transform: translateY(1px);
+        }
+
+        /* Interactive Troubleshooting Assistant Panel */
+        .quick-helper {
+            margin-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            padding-top: 1.5rem;
+        }
+
+        .quick-helper h3 {
+            font-size: 1rem;
+            color: var(--text-main);
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .tips-container {
+            background-color: rgba(15, 23, 42, 0.6);
+            border-radius: 8px;
+            padding: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            border-left: 3px solid var(--accent-blue);
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 2rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-align: center;
+        }
     </style>
 </head>
 <body>
 
+    <div class="glow-orb"></div>
+
     <header>
-        <h1><i class="fa-solid fa-screwdriver-wrench"></i> TechFix Portal</h1>
-        <p>Find quick solutions or send us your device issues for expert help</p>
+        <h1>ElectroFix Hub</h1>
+        <p>Describe your electronics malfunction. Our technical experts will review the data immediately.</p>
     </header>
 
-    <div class="container">
-        <h2 style="margin-bottom: 1rem;">Select Device Type</h2>
-        <div class="categories">
-            <div class="card">
-                <i class="fa-solid fa-tv"></i>
-                <h3>Television (TV)</h3>
-                <p>Screen lines, power issues, audio cuts</p>
-            </div>
-            <div class="card">
-                <i class="fa-solid fa-wifi"></i>
-                <h3>Routers & Modems</h3>
-                <p>No internet, blinking lights, reset loops</p>
-            </div>
-            <div class="card">
-                <i class="fa-solid fa-mobile-screen-button"></i>
-                <h3>Smartphones</h3>
-                <p>Battery drain, bootloops, charging lag</p>
-            </div>
-        </div>
-
-        <div class="quick-fixes">
-            <h2><i class="fa-solid fa-lightbulb"></i> Common Quick Fixes</h2>
-            <div class="faq-item">
-                <h3>TV has sound but no picture?</h3>
-                <p>Unplug the TV from the wall for 60 seconds. Press and hold the power button on the TV itself for 30 seconds while unplugged. Plug it back in. If it fails, the backlight strip might need replacement.</p>
-            </div>
-            <div class="faq-item">
-                <h3>Router lights flashing red?</h3>
-                <p>Unplug the power adapter, wait 30 seconds, and plug it back in. If the broadband light stays red, check your physical fiber/DSL line entry or contact your service provider.</p>
-            </div>
-        </div>
-
-        <div class="upload-section" id="report-form">
-            <h2><i class="fa-solid fa-camera"></i> Report an Electronic Issue</h2>
-            <p style="color: #64748b; margin-bottom: 1.5rem;">Can't fix it? Upload details and a photo of the problem, and our technicians will review it.</p>
+    <main>
+        <form name="device-issues" method="POST" data-netlify="true" class="main-card" enctype="multipart/form-data">
             
-            <form name="device-issues" method="POST" data-netlify="true" enctype="multipart/form-data">
-                <div class="form-group">
-                    <label for="device">Device Type</label>
-                    <select id="device" name="device-type" required>
-                        <option value="">-- Choose Device --</option>
-                        <option value="tv">Television</option>
-                        <option value="router">Router / Network</option>
-                        <option value="phone">Smartphone / Tablet</option>
-                        <option value="other">Other Electronics</option>
-                    </select>
+            <input type="hidden" name="form-name" value="device-issues" />
+
+            <div class="form-group">
+                <label for="device-type">Device Type</label>
+                <select name="device-type" id="device-type" class="form-control" required onchange="updateHelperText()">
+                    <option value="" disabled selected>Select hardware archetype...</option>
+                    <option value="smartphone">Smartphone / Tablet</option>
+                    <option value="laptop">Laptop / Desktop PC</option>
+                    <option value="gaming-console">Gaming Console</option>
+                    <option value="audio-display">Smart TV / Audio Device</option>
+                    <option value="other">Other Circuitry</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="issue-description">Error Details & Symptoms</label>
+                <textarea name="issue-description" id="issue-description" class="form-control" placeholder="Explain what happened. (e.g., short circuit indicators, flashing error codes, loop sequences, hardware drops)" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Diagnostic Snapshot (Photo)</label>
+                <div class="file-upload-wrapper">
+                    <div class="upload-icon">📷</div>
+                    <span style="color: var(--text-muted); font-size: 0.9rem;">Click or drop image to upload file</span>
+                    <input type="file" name="device-photo" id="device-photo" accept="image/*" onchange="displayFileName(this)">
+                    <div id="file-name" class="file-name-display"></div>
                 </div>
+            </div>
 
-                <div class="form-group">
-                    <label for="description">Describe the Problem</label>
-                    <textarea id="description" name="problem-description" placeholder="Explain what happens (e.g., 'TV screen turns green after 10 minutes of usage')" required></textarea>
+            <button type="submit" class="btn-submit">Launch Diagnostic Analysis</button>
+
+            <div class="quick-helper">
+                <h3>System Suggestions:</h3>
+                <div id="helper-text" class="tips-container">
+                    Please select a device type above to see common initial debugging protocols.
                 </div>
+            </div>
 
-                <div class="form-group">
-                    <label for="photo">Upload Photo of the Issue</label>
-                    <input type="file" id="photo" name="problem-photo" accept="image/*" required>
-                </div>
+        </form>
+    </main>
 
-                <button type="submit">Submit Issue to Technicians</button>
-            </form>
-        </div>
-    </div>
+    <footer>
+        &copy; 2026 ElectroFix Hub Portfolio. Powered by secure serverless configurations.
+    </footer>
 
+    <script>
+        // Real-time file selection label text update
+        function displayFileName(input) {
+            const display = document.getElementById('file-name');
+            if (input.files && input.files[0]) {
+                display.innerText = "Selected file: " + input.files[0].name;
+            } else {
+                display.innerText = "";
+            }
+        }
+
+        // Live assistant interaction logic
+        function updateHelperText() {
+            const select = document.getElementById('device-type');
+            const helper = document.getElementById('helper-text');
+            
+            const tips = {
+                'smartphone': "⚡ Quick check: Clean the USB charge port pin contacts with non-conductive tools. Force reset using Power + Volume Down keys.",
+                'laptop': "🔌 Power sequence check: Perform a static discharge by disconnecting power inputs, removing battery assemblies, and holding down the power switch for 15s.",
+                'gaming-console': "🌡️ Diagnostic symptom: Overheating warnings indicate system fans are clogged or thermal dissipation compound requires immediate replacement.",
+                'audio-display': "📺 Signal flow: Isolate downstream inputs. Verify high-bandwidth display paths (HDMI 2.1) and perform direct power recycles.",
+                'other': "🛠️ Universal rule: Isolate power connections. Document any flashing LED patterns or repeating audio alarms for technical review."
+            };
+
+            helper.innerText = tips[select.value] || "Please select a device type above to see common initial debugging protocols.";
+        }
+    </script>
 </body>
 </html>
