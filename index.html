@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ElectroFix Hub - Command Center</title>
+    <title>ElectroFix Hub - Premium Command Center</title>
     <style>
         :root {
-            --bg-dark: #0a1118;
-            --glass-bg: rgba(255, 255, 255, 0.03);
-            --glass-card: rgba(16, 28, 41, 0.45);
-            --glass-border: rgba(255, 255, 255, 0.07);
+            --bg-dark: #0a111a;
+            --glass-card: rgba(18, 30, 47, 0.45);
+            --glass-border: rgba(255, 255, 255, 0.08);
             --neon-cyan: #38bdf8;
             --neon-purple: #a78bfa;
             --text-title: #ffffff;
@@ -26,18 +25,18 @@
         body {
             background-color: var(--bg-dark);
             background-image: 
-                radial-gradient(circle at 70% 20%, rgba(56, 189, 248, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 30% 80%, rgba(167, 139, 250, 0.08) 0%, transparent 50%);
+                radial-gradient(circle at 75% 20%, rgba(56, 189, 248, 0.15) 0%, transparent 45%),
+                radial-gradient(circle at 25% 75%, rgba(167, 139, 250, 0.08) 0%, transparent 45%);
             color: var(--text-title);
             min-height: 100vh;
             display: flex;
             overflow-x: hidden;
         }
 
-        /* Sidebar Matrix */
+        /* Sidebar Navigation */
         .sidebar {
             width: 280px;
-            background: rgba(10, 18, 26, 0.60);
+            background: rgba(10, 17, 26, 0.75);
             border-right: 1px solid var(--glass-border);
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
@@ -77,7 +76,7 @@
             border-radius: 12px;
             font-size: 0.95rem;
             font-weight: 500;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.3s ease;
         }
 
         .menu-link:hover, .menu-item.active .menu-link {
@@ -87,16 +86,16 @@
         }
 
         .status-pill {
-            background: rgba(16, 185, 129, 0.12);
-            color: #34d399;
-            border: 1px solid rgba(16, 185, 129, 0.2);
+            background: rgba(56, 189, 248, 0.12);
+            color: var(--neon-cyan);
+            border: 1px solid rgba(56, 189, 248, 0.2);
             padding: 0.15rem 0.5rem;
             font-size: 0.75rem;
             border-radius: 6px;
             font-weight: 600;
         }
 
-        /* Control Center Workspace Workspace Grid Architecture */
+        /* Control Center Main Container Layout */
         .workspace-canvas {
             flex: 1;
             padding: 3rem;
@@ -107,16 +106,10 @@
             width: 100%;
         }
 
-        /* Top Module Section Layout */
-        .header-block {
-            margin-bottom: 0.5rem;
-        }
-
         .header-block h1 {
             font-size: 2.5rem;
             font-weight: 700;
             letter-spacing: -0.04em;
-            line-height: 1.2;
         }
 
         .header-block .node-status {
@@ -131,15 +124,15 @@
         .node-pulse {
             width: 8px;
             height: 8px;
-            background-color: #34d399;
+            background-color: var(--neon-cyan);
             border-radius: 50%;
-            box-shadow: 0 0 12px #34d399;
+            box-shadow: 0 0 12px var(--neon-cyan);
         }
 
-        /* Core Layout Matrix Configuration matching your blueprint */
+        /* Layout Grid System Alignment */
         .dashboard-grid {
             display: grid;
-            grid-template-columns: 1.6fr 1fr;
+            grid-template-columns: 1.55fr 1fr;
             gap: 2rem;
         }
 
@@ -149,15 +142,15 @@
             gap: 2rem;
         }
 
-        /* Clean Glass Architecture Elements */
+        /* Glassmorphism Panel Blocks */
         .glass-panel {
             background: var(--glass-card);
             border: 1px solid var(--glass-border);
-            border-radius: 20px;
+            border-radius: 22px;
             padding: 2rem;
             backdrop-filter: blur(30px);
             -webkit-backdrop-filter: blur(30px);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
         }
 
         .panel-heading {
@@ -165,12 +158,9 @@
             font-weight: 600;
             margin-bottom: 1.5rem;
             letter-spacing: -0.01em;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
         }
 
-        /* Top Stats Horizontal Pair */
+        /* Stats Cards Side by Side Grid */
         .stats-pair {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -192,33 +182,57 @@
             letter-spacing: -0.02em;
         }
 
-        /* Floating 3D Device Showcase Container */
+        /* Premium CSS Glowing Floating Devices Container */
         .device-showcase {
-            position: relative;
-            height: 180px;
             display: flex;
-            justify-content: space-around;
+            justify-content: space-between;
             align-items: center;
-            padding: 0 1rem;
+            gap: 1rem;
+            height: 140px;
         }
 
-        .floating-hardware {
-            height: 120px;
-            object-fit: contain;
-            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.7));
-            animation: bounce-slow 6s infinite ease-in-out;
-            transition: transform 0.3s;
-        }
-
-        .floating-hardware:hover {
-            transform: scale(1.08) translateY(-5px);
-        }
-
-        /* Right Side Angled Box Module */
-        .time-box {
-            background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%);
+        .premium-device-card {
+            flex: 1;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
             border: 1px solid var(--glass-border);
-            border-radius: 20px;
+            border-radius: 16px;
+            padding: 1.25rem;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            animation: bounce-floating 6s infinite ease-in-out;
+            transition: all 0.3s;
+        }
+
+        .premium-device-card:hover {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
+            transform: translateY(-4px);
+        }
+
+        .premium-device-card .icon {
+            font-size: 2.2rem;
+            margin-bottom: 0.4rem;
+            display: block;
+        }
+
+        .premium-device-card p {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--text-body);
+            letter-spacing: 0.05em;
+        }
+
+        .dev-1 { animation-delay: 0s; }
+        .dev-2 { animation-delay: 1.5s; }
+        .dev-3 { animation-delay: 3s; }
+
+        /* Average Time Section Row Box */
+        .time-box {
+            background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+            border: 1px solid var(--glass-border);
+            border-radius: 22px;
             padding: 2.2rem;
             position: relative;
             overflow: hidden;
@@ -226,14 +240,12 @@
             -webkit-backdrop-filter: blur(30px);
         }
 
-        /* Background grid network decorative pattern */
         .time-box::before {
             content: '';
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            background-image: linear-gradient(rgba(56,189,248,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(56,189,248,0.03) 1px, transparent 1px);
-            background-size: 15px 15px;
-            z-index: 0;
+            background-image: linear-gradient(rgba(56,189,248,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(56,189,248,0.02) 1px, transparent 1px);
+            background-size: 20px 20px;
         }
 
         .time-content {
@@ -241,18 +253,18 @@
             z-index: 1;
         }
 
-        /* Streams UI configuration */
+        /* Stream Setup Styles */
         .stream-list {
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 1.1rem;
         }
 
         .stream-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             padding-bottom: 1rem;
         }
 
@@ -273,6 +285,7 @@
             height: 6px;
             border-radius: 50%;
             background: var(--neon-cyan);
+            box-shadow: 0 0 8px var(--neon-cyan);
         }
 
         .stream-time {
@@ -280,15 +293,15 @@
             color: var(--text-body);
         }
 
-        /* FAQ Interactive Rows Accordion system */
+        /* FAQ Interactive Accordions */
         .faq-wrapper {
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 1.1rem;
         }
 
         .faq-node {
-            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             padding-bottom: 1rem;
         }
 
@@ -306,8 +319,19 @@
             font-weight: 500;
             text-align: left;
             cursor: pointer;
-            padding: 0.25rem 0;
-            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-trigger::after {
+            content: '＋';
+            font-size: 0.85rem;
+            color: var(--neon-cyan);
+        }
+
+        .faq-node.open .faq-trigger::after {
+            content: '－';
         }
 
         .faq-panel {
@@ -316,14 +340,14 @@
             transition: max-height 0.3s ease-out;
             color: var(--text-body);
             font-size: 0.9rem;
-            line-height: 1.5;
+            line-height: 1.6;
         }
 
         .faq-panel p {
-            padding-top: 0.25rem;
+            padding-top: 0.6rem;
         }
 
-        /* Registration Form Components UI */
+        /* Custom User Registration Interface Form */
         .registration-form {
             display: flex;
             flex-direction: column;
@@ -344,7 +368,7 @@
 
         .form-field {
             width: 100%;
-            background: rgba(10, 17, 24, 0.6);
+            background: rgba(10, 17, 26, 0.6);
             border: 1px solid var(--glass-border);
             border-radius: 10px;
             padding: 0.9rem 1.2rem;
@@ -375,16 +399,15 @@
 
         .submit-btn:hover {
             transform: translateY(-1px);
-            box-shadow: 0 12px 30px rgba(56, 189, 248, 0.35);
+            box-shadow: 0 12px 30px rgba(56, 189, 248, 0.4);
         }
 
-        /* Clean animations frame */
-        @keyframes bounce-slow {
+        /* Clean CSS Floating Logic Frame Animation */
+        @keyframes bounce-floating {
             0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+            50% { transform: translateY(-8px); }
         }
 
-        /* Adaptive responsive layer updates */
         @media (max-width: 1150px) {
             body { flex-direction: column; }
             .sidebar { width: 100%; height: auto; }
@@ -440,7 +463,7 @@
                         </div>
                         <div class="stream-row">
                             <div class="stream-info">
-                                <div class="stream-dot" style="background: var(--neon-purple);"></div>
+                                <div class="stream-dot" style="background: var(--neon-purple); box-shadow: 0 0 8px var(--neon-purple);"></div>
                                 <span>Dlarn Incoming Diagnostics #3ZF-3630900</span>
                             </div>
                             <span class="stream-time">3 days ago</span>
@@ -478,9 +501,18 @@
             <div class="right-column">
                 
                 <div class="device-showcase">
-                    <img src="https://i.ibb.co/Vv3Y7wG/laptop-mock.png" alt="Laptop Node" class="floating-hardware" style="animation-delay: 0s;">
-                    <img src="https://i.ibb.co/mSRfWwM/phone-mock.png" alt="Phone Node" class="floating-hardware" style="animation-delay: 1.5s;">
-                    <img src="https://i.ibb.co/6wX2mXY/console-mock.png" alt="Console Node" class="floating-hardware" style="animation-delay: 3s;">
+                    <div class="premium-device-card dev-1">
+                        <span class="icon">💻</span>
+                        <p>Laptop Node</p>
+                    </div>
+                    <div class="premium-device-card dev-2">
+                        <span class="icon">📱</span>
+                        <p>Phone Node</p>
+                    </div>
+                    <div class="premium-device-card dev-3">
+                        <span class="icon">🎮</span>
+                        <p>Console Node</p>
+                    </div>
                 </div>
 
                 <div class="time-box">
@@ -512,16 +544,19 @@
     </main>
 
     <script>
-        // Smooth Accordion Dropdown Logic Controller
+        // Smooth FAQ Dropdown Core Logic Frame Controller
         function toggleFaq(button) {
+            const currentNode = button.parentElement;
             const currentPanel = button.nextElementSibling;
             const isOpen = currentPanel.style.maxHeight;
 
-            document.querySelectorAll('.faq-panel').forEach(panel => {
-                panel.style.maxHeight = null;
+            document.querySelectorAll('.faq-node').forEach(node => {
+                node.classList.remove('open');
+                node.querySelector('.faq-panel').style.maxHeight = null;
             });
 
             if (!isOpen) {
+                currentNode.classList.add('open');
                 currentPanel.style.maxHeight = currentPanel.scrollHeight + "px";
             }
         }
