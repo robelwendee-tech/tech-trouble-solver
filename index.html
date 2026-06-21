@@ -3,349 +3,288 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ElectroFix Hub - 3D Command Center</title>
+    <title>ElectroFix Hub - Premium Dashboard</title>
     <style>
         :root {
-            --bg-deep: #060b19;
-            --panel-bg: rgba(30, 41, 59, 0.4);
-            --neon-blue: #00f2fe;
-            --neon-purple: #4facfe;
-            --text-light: #f1f5f9;
-            --text-dim: #64748b;
-            --grid-color: rgba(0, 242, 254, 0.03);
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #020617 100%);
+            --glass-bg: rgba(30, 41, 59, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --accent-glow: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
 
         body {
-            background-color: var(--bg-deep);
-            color: var(--text-light);
+            background: var(--bg-gradient);
+            color: var(--text-primary);
             min-height: 100vh;
-            overflow-x: hidden;
             display: flex;
-            background-image: 
-                linear-gradient(var(--grid-color) 1px, transparent 1px),
-                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
-            background-size: 30px 30px;
-        }
-
-        /* 3D Perspective Scene Container */
-        .perspective-container {
-            flex: 1;
+            justify-content: center;
+            align-items: center;
             padding: 2rem;
-            perspective: 1000px;
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
+            overflow-x: hidden;
         }
 
-        /* Animated 3D Cyber Header */
+        /* Perspective space setup */
+        .dashboard-container {
+            width: 100%;
+            max-width: 1000px;
+            perspective: 1200px;
+        }
+
+        /* Main Floating Dashboard Structure */
+        .glass-panel {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 3rem;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Elegant Minimalist Header */
         header {
-            background: linear-gradient(135deg, var(--panel-bg), rgba(15, 23, 42, 0.6));
-            border: 1px solid rgba(0, 242, 254, 0.2);
-            border-radius: 12px;
-            padding: 1.5rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(0, 242, 254, 0.1);
-            transform: translateZ(20px);
-            backdrop-filter: blur(10px);
+            margin-bottom: 3rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 1.5rem;
         }
 
         header h1 {
-            font-size: 1.8rem;
-            font-weight: 800;
-            background: linear-gradient(to right, #fff, var(--neon-blue));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: 1px;
+            font-size: 1.75rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
         }
 
-        .system-status {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+        .status-badge {
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 99px;
             font-size: 0.85rem;
-            text-transform: uppercase;
-            color: var(--neon-blue);
-            text-shadow: 0 0 8px var(--neon-blue);
+            color: #38bdf8;
+            font-weight: 500;
         }
 
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            background-color: var(--neon-blue);
-            border-radius: 50%;
-            animation: pulse 1.5s infinite;
-        }
-
-        /* 3D Grid Layout for Cards */
-        .dashboard-grid {
+        /* 3D Grid Elements */
+        .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            transform-style: preserve-3d;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
         }
 
-        /* Interactive 3D Card Element */
-        .card-3d {
-            background: linear-gradient(135deg, rgba(30, 41, 59, 0.6), rgba(15, 23, 42, 0.8));
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 20px;
-            padding: 2rem;
-            min-height: 200px;
-            position: relative;
-            cursor: pointer;
-            transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.3s;
-            transform-style: preserve-3d;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
-        }
-
-        /* Holographic Hover/Tilt Effect */
-        .card-3d:hover {
-            transform: rotateX(7deg) rotateY(-10deg) translateZ(30px);
-            border-color: var(--neon-blue);
-            box-shadow: 0 20px 40px rgba(0, 242, 254, 0.15);
-        }
-
-        .card-icon {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            transform: translateZ(40px);
-            display: inline-block;
-        }
-
-        .card-title {
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-dim);
-            margin-bottom: 0.5rem;
-            transform: translateZ(30px);
-        }
-
-        .card-value {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #fff;
-            transform: translateZ(50px);
-            text-shadow: 0 0 10px rgba(255,255,255,0.1);
-        }
-
-        /* Dynamic Progress Light Bar */
-        .bar-container {
-            width: 100%;
-            height: 6px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 10px;
-            margin-top: 1.5rem;
-            overflow: hidden;
-            transform: translateZ(25px);
-        }
-
-        .bar-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--neon-purple), var(--neon-blue));
-            box-shadow: 0 0 10px var(--neon-blue);
-            width: 0%;
-            transition: width 1.5s ease-in-out;
-        }
-
-        /* Large Data Display Matrix Section */
-        .data-matrix {
-            background: linear-gradient(180deg, rgba(30, 41, 59, 0.3), rgba(15, 23, 42, 0.5));
-            border: 1px solid rgba(255, 255, 255, 0.05);
+        .stat-card {
+            background: rgba(15, 23, 42, 0.3);
+            border: 1px solid var(--glass-border);
             border-radius: 16px;
-            padding: 2rem;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-            transform: translateZ(10px);
+            padding: 1.75rem;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateZ(0px);
         }
 
-        .matrix-title {
+        /* Clean 3D Lift Action */
+        .stat-card:hover {
+            transform: translateZ(30px);
+            background: rgba(30, 41, 59, 0.6);
+            border-color: rgba(56, 189, 248, 0.3);
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 2.25rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            margin-bottom: 0.75rem;
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--accent-glow);
+            width: 0%;
+            transition: width 1s ease-out;
+        }
+
+        /* Stream/Log Table Section */
+        .data-section h2 {
             font-size: 1.2rem;
             font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #fff;
+            margin-bottom: 1.25rem;
+        }
+
+        .stream-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .stream-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-        }
-
-        .action-btn {
-            background: transparent;
-            border: 1px solid var(--neon-blue);
-            color: var(--neon-blue);
-            padding: 0.5rem 1.2rem;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            font-weight: 600;
-            transition: all 0.3s;
-            text-decoration: none;
-        }
-
-        .action-btn:hover {
-            background: var(--neon-blue);
-            color: var(--bg-deep);
-            box-shadow: 0 0 15px var(--neon-blue);
-            transform: translateY(-2px);
-        }
-
-        /* Custom Real-time Table Matrix */
-        .matrix-table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: left;
-        }
-
-        .matrix-table th {
-            padding: 1rem;
-            color: var(--text-dim);
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .matrix-table td {
-            padding: 1.2rem 1rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            background: rgba(15, 23, 42, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
             font-size: 0.95rem;
+            transition: background 0.2s;
         }
 
-        .device-tag {
-            background: rgba(0, 242, 254, 0.1);
-            color: var(--neon-blue);
-            padding: 0.25rem 0.6rem;
+        .stream-row:hover {
+            background: rgba(15, 23, 42, 0.4);
+        }
+
+        .device-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .type-tag {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.25rem 0.5rem;
             border-radius: 4px;
-            font-size: 0.8rem;
-            border: 1px solid rgba(0, 242, 254, 0.2);
         }
 
-        @keyframes pulse {
-            0% { transform: scale(0.95); opacity: 0.5; }
-            50% { transform: scale(1.1); opacity: 1; box-shadow: 0 0 12px var(--neon-blue); }
-            100% { transform: scale(0.95); opacity: 0.5; }
+        .row-status {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #10b981;
         }
 
+        /* Smooth Tilt Script Integration triggers */
         @media (max-width: 768px) {
-            body { flex-direction: column; }
-            .perspective-container { padding: 1rem; }
+            padding: 1rem;
+            .glass-panel { padding: 1.5rem; }
         }
     </style>
 </head>
 <body>
 
-    <div class="perspective-container">
-        
-        <header>
-            <h1>ELECTROFIX // COMMAND_CENTER</h1>
-            <div class="system-status">
-                <div class="status-dot"></div>
-                Diagnostics Node: Active
-            </div>
-        </header>
-
-        <div class="dashboard-grid">
+    <div class="dashboard-container">
+        <div class="glass-panel" id="panel">
             
-            <div class="card-3d" onmousemove="tiltCard(event, this)" onmouseleave="resetCard(this)">
-                <div class="card-icon">⚡</div>
-                <div class="card-title">Active Repair Queues</div>
-                <div class="card-value" id="queue-val">24</div>
-                <div class="bar-container"><div class="bar-fill" style="width: 72%;"></div></div>
+            <header>
+                <h1>System Hub</h1>
+                <div class="status-badge">Diagnostics: Online</div>
+            </header>
+
+            <div class="stats-grid">
+                
+                <div class="stat-card">
+                    <div class="stat-label">Active Queues</div>
+                    <div class="stat-value">18</div>
+                    <div class="progress-track"><div class="progress-bar" style="width: 60%;"></div></div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-label">Solved Tickets</div>
+                    <div class="stat-value">142</div>
+                    <div class="progress-track"><div class="progress-bar" style="width: 85%;"></div></div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-label">Response Index</div>
+                    <div class="stat-value">99.2%</div>
+                    <div class="progress-track"><div class="progress-bar" style="width: 99%;"></div></div>
+                </div>
+
             </div>
 
-            <div class="card-3d" onmousemove="tiltCard(event, this)" onmouseleave="resetCard(this)">
-                <div class="card-icon">🔬</div>
-                <div class="card-title">Diagnostics Solved</div>
-                <div class="card-value" id="solved-val">142</div>
-                <div class="bar-container"><div class="bar-fill" style="width: 88%;"></div></div>
-            </div>
+            <div class="data-section">
+                <h2>Live Activity Stream</h2>
+                <div class="stream-list">
+                    
+                    <div class="stream-row">
+                        <div class="device-info">
+                            <span class="type-tag">Laptop</span>
+                            <span>Power rails failing check sequence</span>
+                        </div>
+                        <span class="row-status" style="color: #f59e0b;">Reviewing</span>
+                    </div>
 
-            <div class="card-3d" onmousemove="tiltCard(event, this)" onmouseleave="resetCard(this)">
-                <div class="card-icon">⏱️</div>
-                <div class="card-title">Avg. Repair Time</div>
-                <div class="card-value">34m</div>
-                <div class="bar-container"><div class="bar-fill" style="width: 45%;"></div></div>
+                    <div class="stream-row">
+                        <div class="device-info">
+                            <span class="type-tag">Smartphone</span>
+                            <span>Display assembly replacement config</span>
+                        </div>
+                        <span class="row-status">Completed</span>
+                    </div>
+
+                    <div class="stream-row">
+                        <div class="device-info">
+                            <span class="type-tag">Console</span>
+                            <span>APU thermal compound dry replacement</span>
+                        </div>
+                        <span class="row-status">Completed</span>
+                    </div>
+
+                </div>
             </div>
 
         </div>
-
-        <div class="data-matrix">
-            <div class="matrix-title">
-                <span>Incoming Diagnostics Stream</span>
-                <a href="index.html" class="action-btn">+ File New Issue</a>
-            </div>
-
-            <table class="matrix-table">
-                <thead>
-                    <tr>
-                        <th>Device Type</th>
-                        <th>Reported System Fault</th>
-                        <th>Node Code</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><span class="device-tag">Laptop</span></td>
-                        <td>Static shorts following hardware power surge</td>
-                        <td style="color: var(--text-dim);">#N-4089</td>
-                        <td style="color: #f59e0b;">Analyzing...</td>
-                    </tr>
-                    <tr>
-                        <td><span class="device-tag">Smartphone</span></td>
-                        <td>Boot loop sequence triggered after battery drain</td>
-                        <td style="color: var(--text-dim);">#N-4088</td>
-                        <td style="color: #10b981;">Ready</td>
-                    </tr>
-                    <tr>
-                        <td><span class="device-tag">Console</span></td>
-                        <td>Thermal warning shutdown sequence inside fan bank</td>
-                        <td style="color: var(--text-dim);">#N-4087</td>
-                        <td style="color: #10b981;">Ready</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
     </div>
 
     <script>
-        function tiltCard(e, card) {
-            const cardRect = card.getBoundingClientRect();
-            const cardWidth = cardRect.width;
-            const cardHeight = cardRect.height;
-            
-            // Calculate mouse coordinates relative to center of the card
-            const mouseX = e.clientX - cardRect.left - cardWidth / 2;
-            const mouseY = e.clientY - cardRect.top - cardHeight / 2;
-            
-            // Map values to degree shifts (max 15 deg tilt)
-            const rotateX = -(mouseY / cardHeight / 2) * 25;
-            const rotateY = (mouseX / cardWidth / 2) * 25;
-            
-            card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(25px)`;
-        }
+        const panel = document.getElementById('panel');
+        const container = document.querySelector('.dashboard-container');
 
-        function resetCard(card) {
-            card.style.transform = 'rotateX(0deg) rotateY(0deg) translateZ(0px)';
-        }
+        // Smooth subtle 3D glass mouse follow effect
+        container.addEventListener('mousemove', (e) => {
+            const rect = container.getBoundingClientRect();
+            const x = e.clientX - rect.left - (rect.width / 2);
+            const y = e.clientY - rect.top - (rect.height / 2);
+            
+            // Subtle premium movement parameters (max 6 degree tilt)
+            const tiltX = -(y / rect.height) * 12;
+            const tiltY = (x / rect.width) * 12;
 
-        // Live simulation loading animations
+            panel.style.transform = `rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+        });
+
+        container.addEventListener('mouseleave', () => {
+            panel.style.transform = 'rotateX(0deg) rotateY(0deg)';
+        });
+
+        // Trigger loading animations
         window.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
-                document.querySelectorAll('.bar-fill').forEach(bar => {
-                    const width = bar.style.width;
-                    bar.style.width = '0%';
-                    setTimeout(() => bar.style.width = width, 200);
+                document.querySelectorAll('.progress-bar').forEach(bar => {
+                    bar.style.width = bar.style.width; 
                 });
-            }, 300);
+            }, 150);
         });
     </script>
 </body>
