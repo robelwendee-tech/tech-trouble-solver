@@ -3,308 +3,350 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ElectroFix Hub - Expert Tech Troubleshooting</title>
+    <title>ElectroFix Hub - 3D Command Center</title>
     <style>
         :root {
-            --bg-dark: #0f172a;
-            --card-bg: #1e293b;
-            --accent-blue: #38bdf8;
-            --accent-glow: #0284c7;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --border-color: #334155;
+            --bg-deep: #060b19;
+            --panel-bg: rgba(30, 41, 59, 0.4);
+            --neon-blue: #00f2fe;
+            --neon-purple: #4facfe;
+            --text-light: #f1f5f9;
+            --text-dim: #64748b;
+            --grid-color: rgba(0, 242, 254, 0.03);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', system-ui, sans-serif;
         }
 
         body {
-            background-color: var(--bg-dark);
-            color: var(--text-main);
+            background-color: var(--bg-deep);
+            color: var(--text-light);
             min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            background-image: 
+                linear-gradient(var(--grid-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        /* 3D Perspective Scene Container */
+        .perspective-container {
+            flex: 1;
+            padding: 2rem;
+            perspective: 1000px;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            overflow-x: hidden;
+            gap: 2rem;
         }
 
-        /* Ambient Glow Background Effects */
-        .glow-orb {
-            position: absolute;
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, rgba(0,0,0,0) 70%);
-            top: -100px;
-            z-index: -1;
-        }
-
+        /* Animated 3D Cyber Header */
         header {
-            text-align: center;
-            padding: 3rem 1rem 1.5rem 1rem;
-            max-width: 800px;
-            width: 100%;
+            background: linear-gradient(135deg, var(--panel-bg), rgba(15, 23, 42, 0.6));
+            border: 1px solid rgba(0, 242, 254, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(0, 242, 254, 0.1);
+            transform: translateZ(20px);
+            backdrop-filter: blur(10px);
         }
 
         header h1 {
-            font-size: 2.5rem;
+            font-size: 1.8rem;
             font-weight: 800;
-            letter-spacing: -0.05em;
-            background: linear-gradient(to right, #ffffff, var(--accent-blue));
+            background: linear-gradient(to right, #fff, var(--neon-blue));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 0.5rem;
+            letter-spacing: 1px;
         }
 
-        header p {
-            color: var(--text-muted);
-            font-size: 1.1rem;
-        }
-
-        main {
-            width: 100%;
-            max-width: 650px;
-            padding: 0 1.5rem 4rem 1.5rem;
-        }
-
-        /* Glassmorphic Container Card */
-        .main-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 2.5rem;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(8px);
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 0.9rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--accent-blue);
-            margin-bottom: 0.5rem;
-        }
-
-        .form-control {
-            width: 100%;
-            background-color: #0f172a;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 0.75rem 1rem;
-            color: var(--text-main);
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: var(--accent-blue);
-            box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
-        }
-
-        select.form-control {
-            cursor: pointer;
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 1rem center;
-            background-size: 1.25rem;
-        }
-
-        textarea.form-control {
-            resize: vertical;
-            min-height: 120px;
-        }
-
-        /* Custom Modern File Upload */
-        .file-upload-wrapper {
-            position: relative;
-            border: 2px dashed var(--border-color);
-            border-radius: 8px;
-            padding: 1.5rem;
-            text-align: center;
-            background-color: rgba(15, 23, 42, 0.5);
-            cursor: pointer;
-            transition: border-color 0.3s ease;
-        }
-
-        .file-upload-wrapper:hover {
-            border-color: var(--accent-blue);
-        }
-
-        .file-upload-wrapper input[type="file"] {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            cursor: pointer;
-        }
-
-        .upload-icon {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-            color: var(--text-muted);
-        }
-
-        .file-name-display {
+        .system-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
             font-size: 0.85rem;
-            color: var(--accent-blue);
-            margin-top: 0.5rem;
-            font-weight: 500;
+            text-transform: uppercase;
+            color: var(--neon-blue);
+            text-shadow: 0 0 8px var(--neon-blue);
         }
 
-        /* Glowing Submit Button */
-        .btn-submit {
-            width: 100%;
-            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 1rem;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
-            margin-top: 1rem;
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--neon-blue);
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
         }
 
-        .btn-submit:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(56, 189, 248, 0.4);
-            background: linear-gradient(135deg, #0369a1 0%, #0284c7 100%);
+        /* 3D Grid Layout for Cards */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            transform-style: preserve-3d;
         }
 
-        .btn-submit:active {
-            transform: translateY(1px);
-        }
-
-        /* Interactive Troubleshooting Assistant Panel */
-        .quick-helper {
-            margin-top: 2rem;
-            border-top: 1px solid var(--border-color);
-            padding-top: 1.5rem;
-        }
-
-        .quick-helper h3 {
-            font-size: 1rem;
-            color: var(--text-main);
-            margin-bottom: 0.75rem;
-            font-weight: 600;
-        }
-
-        .tips-container {
-            background-color: rgba(15, 23, 42, 0.6);
-            border-radius: 8px;
-            padding: 1rem;
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            border-left: 3px solid var(--accent-blue);
-        }
-
-        footer {
-            margin-top: auto;
+        /* Interactive 3D Card Element */
+        .card-3d {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.6), rgba(15, 23, 42, 0.8));
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
             padding: 2rem;
+            min-height: 200px;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.3s;
+            transform-style: preserve-3d;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Holographic Hover/Tilt Effect */
+        .card-3d:hover {
+            transform: rotateX(7deg) rotateY(-10deg) translateZ(30px);
+            border-color: var(--neon-blue);
+            box-shadow: 0 20px 40px rgba(0, 242, 254, 0.15);
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            transform: translateZ(40px);
+            display: inline-block;
+        }
+
+        .card-title {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-dim);
+            margin-bottom: 0.5rem;
+            transform: translateZ(30px);
+        }
+
+        .card-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #fff;
+            transform: translateZ(50px);
+            text-shadow: 0 0 10px rgba(255,255,255,0.1);
+        }
+
+        /* Dynamic Progress Light Bar */
+        .bar-container {
+            width: 100%;
+            height: 6px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            margin-top: 1.5rem;
+            overflow: hidden;
+            transform: translateZ(25px);
+        }
+
+        .bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--neon-purple), var(--neon-blue));
+            box-shadow: 0 0 10px var(--neon-blue);
+            width: 0%;
+            transition: width 1.5s ease-in-out;
+        }
+
+        /* Large Data Display Matrix Section */
+        .data-matrix {
+            background: linear-gradient(180deg, rgba(30, 41, 59, 0.3), rgba(15, 23, 42, 0.5));
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            transform: translateZ(10px);
+        }
+
+        .matrix-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .action-btn {
+            background: transparent;
+            border: 1px solid var(--neon-blue);
+            color: var(--neon-blue);
+            padding: 0.5rem 1.2rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .action-btn:hover {
+            background: var(--neon-blue);
+            color: var(--bg-deep);
+            box-shadow: 0 0 15px var(--neon-blue);
+            transform: translateY(-2px);
+        }
+
+        /* Custom Real-time Table Matrix */
+        .matrix-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .matrix-table th {
+            padding: 1rem;
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .matrix-table td {
+            padding: 1.2rem 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            font-size: 0.95rem;
+        }
+
+        .device-tag {
+            background: rgba(0, 242, 254, 0.1);
+            color: var(--neon-blue);
+            padding: 0.25rem 0.6rem;
+            border-radius: 4px;
             font-size: 0.8rem;
-            color: var(--text-muted);
-            text-align: center;
+            border: 1px solid rgba(0, 242, 254, 0.2);
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 1; box-shadow: 0 0 12px var(--neon-blue); }
+            100% { transform: scale(0.95); opacity: 0.5; }
+        }
+
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .perspective-container { padding: 1rem; }
         }
     </style>
 </head>
 <body>
 
-    <div class="glow-orb"></div>
+    <div class="perspective-container">
+        
+        <header>
+            <h1>ELECTROFIX // COMMAND_CENTER</h1>
+            <div class="system-status">
+                <div class="status-dot"></div>
+                Diagnostics Node: Active
+            </div>
+        </header>
 
-    <header>
-        <h1>ElectroFix Hub</h1>
-        <p>Describe your electronics malfunction. Our technical experts will review the data immediately.</p>
-    </header>
-
-    <main>
-        <form name="device-issues" method="POST" data-netlify="true" class="main-card" enctype="multipart/form-data">
+        <div class="dashboard-grid">
             
-            <input type="hidden" name="form-name" value="device-issues" />
-
-            <div class="form-group">
-                <label for="device-type">Device Type</label>
-                <select name="device-type" id="device-type" class="form-control" required onchange="updateHelperText()">
-                    <option value="" disabled selected>Select hardware archetype...</option>
-                    <option value="smartphone">Smartphone / Tablet</option>
-                    <option value="laptop">Laptop / Desktop PC</option>
-                    <option value="gaming-console">Gaming Console</option>
-                    <option value="audio-display">Smart TV / Audio Device</option>
-                    <option value="other">Other Circuitry</option>
-                </select>
+            <div class="card-3d" onmousemove="tiltCard(event, this)" onmouseleave="resetCard(this)">
+                <div class="card-icon">⚡</div>
+                <div class="card-title">Active Repair Queues</div>
+                <div class="card-value" id="queue-val">24</div>
+                <div class="bar-container"><div class="bar-fill" style="width: 72%;"></div></div>
             </div>
 
-            <div class="form-group">
-                <label for="issue-description">Error Details & Symptoms</label>
-                <textarea name="issue-description" id="issue-description" class="form-control" placeholder="Explain what happened. (e.g., short circuit indicators, flashing error codes, loop sequences, hardware drops)" required></textarea>
+            <div class="card-3d" onmousemove="tiltCard(event, this)" onmouseleave="resetCard(this)">
+                <div class="card-icon">🔬</div>
+                <div class="card-title">Diagnostics Solved</div>
+                <div class="card-value" id="solved-val">142</div>
+                <div class="bar-container"><div class="bar-fill" style="width: 88%;"></div></div>
             </div>
 
-            <div class="form-group">
-                <label>Diagnostic Snapshot (Photo)</label>
-                <div class="file-upload-wrapper">
-                    <div class="upload-icon">📷</div>
-                    <span style="color: var(--text-muted); font-size: 0.9rem;">Click or drop image to upload file</span>
-                    <input type="file" name="device-photo" id="device-photo" accept="image/*" onchange="displayFileName(this)">
-                    <div id="file-name" class="file-name-display"></div>
-                </div>
+            <div class="card-3d" onmousemove="tiltCard(event, this)" onmouseleave="resetCard(this)">
+                <div class="card-icon">⏱️</div>
+                <div class="card-title">Avg. Repair Time</div>
+                <div class="card-value">34m</div>
+                <div class="bar-container"><div class="bar-fill" style="width: 45%;"></div></div>
             </div>
 
-            <button type="submit" class="btn-submit">Launch Diagnostic Analysis</button>
+        </div>
 
-            <div class="quick-helper">
-                <h3>System Suggestions:</h3>
-                <div id="helper-text" class="tips-container">
-                    Please select a device type above to see common initial debugging protocols.
-                </div>
+        <div class="data-matrix">
+            <div class="matrix-title">
+                <span>Incoming Diagnostics Stream</span>
+                <a href="index.html" class="action-btn">+ File New Issue</a>
             </div>
 
-        </form>
-    </main>
+            <table class="matrix-table">
+                <thead>
+                    <tr>
+                        <th>Device Type</th>
+                        <th>Reported System Fault</th>
+                        <th>Node Code</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="device-tag">Laptop</span></td>
+                        <td>Static shorts following hardware power surge</td>
+                        <td style="color: var(--text-dim);">#N-4089</td>
+                        <td style="color: #f59e0b;">Analyzing...</td>
+                    </tr>
+                    <tr>
+                        <td><span class="device-tag">Smartphone</span></td>
+                        <td>Boot loop sequence triggered after battery drain</td>
+                        <td style="color: var(--text-dim);">#N-4088</td>
+                        <td style="color: #10b981;">Ready</td>
+                    </tr>
+                    <tr>
+                        <td><span class="device-tag">Console</span></td>
+                        <td>Thermal warning shutdown sequence inside fan bank</td>
+                        <td style="color: var(--text-dim);">#N-4087</td>
+                        <td style="color: #10b981;">Ready</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
-    <footer>
-        &copy; 2026 ElectroFix Hub Portfolio. Powered by secure serverless configurations.
-    </footer>
+    </div>
 
     <script>
-        // Real-time file selection label text update
-        function displayFileName(input) {
-            const display = document.getElementById('file-name');
-            if (input.files && input.files[0]) {
-                display.innerText = "Selected file: " + input.files[0].name;
-            } else {
-                display.innerText = "";
-            }
-        }
-
-        // Live assistant interaction logic
-        function updateHelperText() {
-            const select = document.getElementById('device-type');
-            const helper = document.getElementById('helper-text');
+        function tiltCard(e, card) {
+            const cardRect = card.getBoundingClientRect();
+            const cardWidth = cardRect.width;
+            const cardHeight = cardRect.height;
             
-            const tips = {
-                'smartphone': "⚡ Quick check: Clean the USB charge port pin contacts with non-conductive tools. Force reset using Power + Volume Down keys.",
-                'laptop': "🔌 Power sequence check: Perform a static discharge by disconnecting power inputs, removing battery assemblies, and holding down the power switch for 15s.",
-                'gaming-console': "🌡️ Diagnostic symptom: Overheating warnings indicate system fans are clogged or thermal dissipation compound requires immediate replacement.",
-                'audio-display': "📺 Signal flow: Isolate downstream inputs. Verify high-bandwidth display paths (HDMI 2.1) and perform direct power recycles.",
-                'other': "🛠️ Universal rule: Isolate power connections. Document any flashing LED patterns or repeating audio alarms for technical review."
-            };
-
-            helper.innerText = tips[select.value] || "Please select a device type above to see common initial debugging protocols.";
+            // Calculate mouse coordinates relative to center of the card
+            const mouseX = e.clientX - cardRect.left - cardWidth / 2;
+            const mouseY = e.clientY - cardRect.top - cardHeight / 2;
+            
+            // Map values to degree shifts (max 15 deg tilt)
+            const rotateX = -(mouseY / cardHeight / 2) * 25;
+            const rotateY = (mouseX / cardWidth / 2) * 25;
+            
+            card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(25px)`;
         }
+
+        function resetCard(card) {
+            card.style.transform = 'rotateX(0deg) rotateY(0deg) translateZ(0px)';
+        }
+
+        // Live simulation loading animations
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                document.querySelectorAll('.bar-fill').forEach(bar => {
+                    const width = bar.style.width;
+                    bar.style.width = '0%';
+                    setTimeout(() => bar.style.width = width, 200);
+                });
+            }, 300);
+        });
     </script>
 </body>
 </html>
