@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ElectroFix Hub - Premium Dashboard</title>
+    <title>ElectroFix Hub - Premium Command Center</title>
     <style>
         :root {
-            --bg-base: #0b0f19;
-            --glass-bg: rgba(22, 32, 53, 0.45);
+            --bg-base: #0b1324;
+            --glass-bg: rgba(255, 255, 255, 0.04);
+            --glass-card: rgba(22, 34, 57, 0.55);
             --glass-border: rgba(255, 255, 255, 0.08);
-            --accent-cyan: #38bdf8;
-            --accent-purple: #818cf8;
-            --accent-glow: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+            --accent-cyan: #3af0ff;
+            --accent-purple: #9ca3af;
             --text-main: #f8fafc;
             --text-sub: #94a3b8;
         }
@@ -26,8 +26,8 @@
         body {
             background-color: var(--bg-base);
             background-image: 
-                radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(129, 140, 248, 0.08) 0%, transparent 40%);
+                radial-gradient(circle at 80% 10%, rgba(58, 240, 255, 0.12) 0%, transparent 50%),
+                radial-gradient(circle at 20% 80%, rgba(129, 140, 248, 0.08) 0%, transparent 50%);
             color: var(--text-main);
             min-height: 100vh;
             display: flex;
@@ -36,22 +36,22 @@
 
         /* Sidebar Navigation */
         .sidebar {
-            width: 260px;
-            background: rgba(15, 23, 42, 0.4);
+            width: 280px;
+            background: rgba(11, 19, 36, 0.7);
             border-right: 1px solid var(--glass-border);
-            backdrop-filter: blur(20px);
-            padding: 2rem 1.5rem;
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            padding: 2.5rem 1.75rem;
             display: flex;
             flex-direction: column;
             gap: 2.5rem;
-            z-index: 10;
         }
 
         .brand {
             display: flex;
             align-items: center;
             gap: 0.75rem;
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             font-weight: 700;
             letter-spacing: -0.03em;
             background: linear-gradient(to right, #fff, var(--accent-cyan));
@@ -70,13 +70,13 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0.8rem 1rem;
+            padding: 0.9rem 1.2rem;
             color: var(--text-sub);
             text-decoration: none;
-            border-radius: 12px;
-            font-size: 0.95rem;
+            border-radius: 14px;
+            font-size: 1rem;
             font-weight: 500;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
         }
 
         .menu-item a:hover, .menu-item.active a {
@@ -86,202 +86,216 @@
         }
 
         .badge-active {
-            background: rgba(16, 185, 129, 0.15);
-            color: #10b981;
+            background: rgba(58, 240, 255, 0.1);
+            color: var(--accent-cyan);
+            border: 1px solid rgba(58, 240, 255, 0.2);
             padding: 0.15rem 0.5rem;
             font-size: 0.75rem;
-            border-radius: 6px;
+            border-radius: 8px;
             font-weight: 600;
         }
 
-        /* Main Perspective Canvas Layout */
+        /* Main Workspace Canvas */
         .main-content {
             flex: 1;
-            padding: 2.5rem;
-            perspective: 1500px;
+            padding: 3rem;
             display: flex;
             flex-direction: column;
-            gap: 2rem;
-            max-width: 1400px;
-            margin: 0 auto;
+            gap: 2.5rem;
+            max-width: 1300px;
             width: 100%;
         }
 
-        /* 3D Main Scene Wrapper */
-        .scene-3d {
-            transform-style: preserve-3d;
-            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-        }
-
-        /* Command Top Bar */
-        .command-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transform: translateZ(30px);
-        }
-
-        .command-title h2 {
-            font-size: 2.2rem;
+        .command-header h2 {
+            font-size: 2.4rem;
             font-weight: 700;
-            letter-spacing: -0.04em;
+            letter-spacing: -0.03em;
+            margin-bottom: 0.25rem;
         }
 
         .command-sub {
             color: var(--text-sub);
-            font-size: 0.95rem;
-            margin-top: 0.25rem;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        /* Flex Row Layer containing Stats & Floating Showcase Hardware */
-        .row-showcase {
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent-cyan);
+        }
+
+        /* Premium Showcase Section */
+        .showcase-row {
             display: grid;
-            grid-template-columns: 1.4fr 1fr;
-            gap: 2rem;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 2.5rem;
             align-items: center;
         }
 
-        .stats-subgrid {
+        .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1.5rem;
         }
 
         .glass-card {
-            background: var(--glass-bg);
+            background: var(--glass-card);
             border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 1.75rem;
-            backdrop-filter: blur(16px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-            transform-style: preserve-3d;
-            transition: border-color 0.3s, box-shadow 0.3s;
+            border-radius: 24px;
+            padding: 2rem;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .glass-card:hover {
-            border-color: rgba(56, 189, 248, 0.3);
-            box-shadow: 0 30px 60px rgba(56, 189, 248, 0.08);
+            transform: translateY(-5px);
+            border-color: rgba(58, 240, 255, 0.25);
+            box-shadow: 0 30px 60px rgba(58, 240, 255, 0.05);
         }
 
         .card-lbl {
             font-size: 0.8rem;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.06em;
             color: var(--text-sub);
             font-weight: 600;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.75rem;
         }
 
         .card-num {
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             font-weight: 700;
             letter-spacing: -0.02em;
         }
 
-        /* Premium Device Canvas Showcase */
-        .hardware-canvas {
+        /* Upgraded Luxury 3D Floating Devices */
+        .device-canvas {
             position: relative;
-            height: 220px;
+            height: 250px;
             display: flex;
             justify-content: center;
             align-items: center;
-            transform: translateZ(50px);
         }
 
-        .floating-device {
+        .glow-device {
             position: absolute;
-            max-width: 100%;
-            height: auto;
-            filter: drop-shadow(0 25px 35px rgba(0,0,0,0.6));
-            animation: float-prime 5s infinite ease-in-out;
-        }
-
-        /* Splitting into Laptop, Console, Phone positioning rules */
-        .device-laptop { width: 170px; left: 10px; top: 10px; animation-delay: 0s; }
-        .device-console { width: 140px; right: 20px; bottom: 10px; animation-delay: 1.5s; }
-        .device-phone { width: 65px; left: 190px; bottom: 40px; animation-delay: 0.7s; }
-
-        /* Two Column Dynamic Module Frame Layout */
-        .dashboard-modules {
-            display: grid;
-            grid-template-columns: 1.6fr 1fr;
-            gap: 2rem;
-        }
-
-        .module-block {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.02) 100%);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4), inset 0 0 20px rgba(255,255,255,0.05);
             display: flex;
             flex-direction: column;
-            gap: 1.25rem;
-        }
-
-        .module-block h3 {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #fff;
-        }
-
-        /* Stream Rows UI */
-        .stream-box {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-        }
-
-        .stream-item {
-            display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
-            background: rgba(22, 32, 53, 0.25);
-            border: 1px solid rgba(255, 255, 255, 0.03);
-            padding: 1.1rem 1.5rem;
-            border-radius: 14px;
-            font-size: 0.95rem;
-            transition: all 0.2s;
+            animation: float-animation 6s infinite ease-in-out;
+            transition: all 0.3s ease;
         }
 
-        .stream-item:hover {
-            background: rgba(22, 32, 53, 0.5);
-            border-color: rgba(255,255,255,0.06);
+        .glow-device:hover {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 30px 60px rgba(58, 240, 255, 0.15);
         }
 
-        .dev-badge {
+        .glow-device span {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .glow-device p {
             font-size: 0.75rem;
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.03em;
-            padding: 0.25rem 0.5rem;
-            background: rgba(255,255,255,0.06);
-            border-radius: 6px;
+            letter-spacing: 0.05em;
             color: var(--text-sub);
-            margin-right: 0.75rem;
         }
 
-        /* Premium Accordion FAQ Section UI */
-        .faq-stack {
+        .dev-laptop { width: 160px; height: 110px; left: 0; top: 10px; animation-delay: 0s; }
+        .dev-console { width: 140px; height: 130px; right: 10px; bottom: 10px; animation-delay: 2s; }
+        .dev-phone { width: 75px; height: 140px; left: 180px; bottom: 20px; animation-delay: 4s; }
+
+        /* Bottom Modules Partition */
+        .bottom-grid {
+            display: grid;
+            grid-template-columns: 1.50fr 1fr;
+            gap: 2.5rem;
+        }
+
+        .module-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.25rem;
+            letter-spacing: -0.01em;
+        }
+
+        /* Stream Setup */
+        .stream-stack {
             display: flex;
             flex-direction: column;
-            gap: 0.75rem;
+            gap: 0.85rem;
         }
 
-        .faq-item {
-            background: rgba(22, 32, 53, 0.25);
-            border: 1px solid rgba(255,255,255,0.03);
-            border-radius: 12px;
+        .stream-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(22, 34, 57, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            padding: 1.25rem 1.75rem;
+            border-radius: 18px;
+            transition: background 0.3s;
+        }
+
+        .stream-row:hover {
+            background: rgba(22, 34, 57, 0.5);
+        }
+
+        .stream-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .type-pill {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            background: rgba(255, 255, 255, 0.06);
+            padding: 0.3rem 0.6rem;
+            border-radius: 8px;
+            color: var(--text-sub);
+        }
+
+        /* FAQ Setup Accordion */
+        .faq-box {
+            margin-top: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+        }
+
+        .faq-card {
+            background: rgba(22, 34, 57, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
             overflow: hidden;
-            transition: all 0.3s;
         }
 
-        .faq-trigger {
+        .faq-btn {
             width: 100%;
             background: transparent;
             border: none;
             color: var(--text-main);
-            padding: 1.1rem 1.5rem;
+            padding: 1.25rem 1.75rem;
             text-align: left;
-            font-size: 0.95rem;
+            font-size: 1rem;
             font-weight: 500;
             cursor: pointer;
             display: flex;
@@ -289,112 +303,117 @@
             align-items: center;
         }
 
-        .faq-trigger:after {
-            content: '＋';
-            font-size: 0.85rem;
+        .faq-btn::after {
+            content: '↓';
             color: var(--accent-cyan);
             transition: transform 0.3s;
         }
 
-        .faq-item.open .faq-trigger:after {
-            content: '－';
+        .faq-card.open .faq-btn::after {
+            transform: rotate(180deg);
         }
 
-        .faq-content {
+        .faq-panel {
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.3s ease-out;
-            background: rgba(15, 23, 42, 0.2);
             color: var(--text-sub);
-            font-size: 0.9rem;
-            line-height: 1.5;
+            font-size: 0.95rem;
+            line-height: 1.6;
         }
 
-        .faq-content p {
-            padding: 0 1.5rem 1.25rem 1.5rem;
+        .faq-panel p {
+            padding: 0 1.75rem 1.25rem 1.75rem;
         }
 
-        /* Premium Form Register Container card */
-        .auth-widget {
+        /* Premium Authentication Component */
+        .auth-container {
             display: flex;
             flex-direction: column;
-            gap: 1.25rem;
+            gap: 1.5rem;
         }
 
-        .auth-tabs {
+        .auth-nav {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            background: rgba(15, 23, 42, 0.4);
-            border-radius: 10px;
-            padding: 0.25rem;
-            border: 1px solid rgba(255,255,255,0.03);
+            background: rgba(11, 19, 36, 0.5);
+            padding: 0.3rem;
+            border-radius: 14px;
+            border: 1px solid var(--glass-border);
         }
 
-        .tab-btn {
+        .auth-tab {
             background: transparent;
             border: none;
             color: var(--text-sub);
-            padding: 0.5rem;
-            cursor: pointer;
-            border-radius: 8px;
-            font-size: 0.85rem;
+            padding: 0.6rem;
             font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border-radius: 10px;
             transition: all 0.2s;
         }
 
-        .tab-btn.active {
-            background: var(--glass-bg);
+        .auth-tab.active {
+            background: var(--glass-card);
             color: #fff;
             border: 1px solid var(--glass-border);
         }
 
-        .input-box {
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+        }
+
+        .premium-input {
             width: 100%;
-            background: rgba(15, 23, 42, 0.5);
+            background: rgba(11, 19, 36, 0.4);
             border: 1px solid var(--glass-border);
-            border-radius: 10px;
-            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
             color: #fff;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             transition: all 0.3s;
         }
 
-        .input-box:focus {
+        .premium-input:focus {
             outline: none;
             border-color: var(--accent-cyan);
-            box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.15);
+            box-shadow: 0 0 0 2px rgba(58, 240, 255, 0.15);
         }
 
-        .btn-action {
+        .premium-btn {
             width: 100%;
-            background: var(--accent-glow);
+            background: linear-gradient(135deg, #0284c7 0%, #3af0ff 100%);
             border: none;
             color: #fff;
-            padding: 0.85rem;
-            border-radius: 10px;
+            padding: 1rem;
+            border-radius: 12px;
             font-weight: 600;
+            font-size: 1rem;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(129, 140, 248, 0.2);
-            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 10px 25px rgba(2, 132, 199, 0.25);
+            transition: all 0.3s;
         }
 
-        .btn-action:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(56, 189, 248, 0.3);
+        .premium-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(58, 240, 255, 0.3);
         }
 
-        /* Sophisticated Animation Framework profiles */
-        @keyframes float-prime {
-            0% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-10px) rotate(2deg); }
-            100% { transform: translateY(0px) rotate(0deg); }
+        /* Clean Glass Float Keyframes */
+        @keyframes float-animation {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
+            100% { transform: translateY(0px); }
         }
 
-        @media (max-width: 1024px) {
+        @media (max-width: 1100px) {
             body { flex-direction: column; }
-            .sidebar { width: 100%; height: auto; }
-            .dashboard-modules, .row-showcase { grid-template-columns: 1fr; }
-            .hardware-canvas { display: none; }
+            .sidebar { width: 100%; }
+            .showcase-row, .bottom-grid { grid-template-columns: 1fr; }
+            .device-canvas { display: none; }
         }
     </style>
 </head>
@@ -413,152 +432,142 @@
     </nav>
 
     <main class="main-content">
-        <div class="scene-3d" id="scene-canvas">
+        
+        <div class="command-header">
+            <h2>ElectroFix // Command_Center</h2>
+            <div class="command-sub"><div class="status-dot"></div> Diagnostics Node: Active</div>
+        </div>
 
-            <div class="command-header">
-                <div class="command-title">
-                    <h2>ElectroFix // Command_Center</h2>
-                    <div class="command-sub">Diagnostics Node: Active</div>
+        <div class="showcase-row">
+            <div class="stats-grid">
+                <div class="glass-card">
+                    <div class="card-lbl">Active Repair Queues</div>
+                    <div class="card-num">24</div>
+                </div>
+                <div class="glass-card">
+                    <div class="card-lbl">Diagnostics Solved</div>
+                    <div class="card-num">142</div>
+                </div>
+                <div class="glass-card">
+                    <div class="card-lbl">Avg. Repair Time</div>
+                    <div class="card-num" style="color: var(--accent-cyan)">34m</div>
                 </div>
             </div>
 
-            <div class="row-showcase">
-                <div class="stats-subgrid">
-                    <div class="glass-card">
-                        <div class="card-lbl">Active Repair Queues</div>
-                        <div class="card-num">24</div>
+            <div class="device-canvas">
+                <div class="glow-device dev-laptop">
+                    <span>💻</span>
+                    <p>Laptop Node</p>
+                </div>
+                <div class="glow-device dev-phone">
+                    <span>📱</span>
+                    <p>Mobile</p>
+                </div>
+                <div class="glow-device dev-console">
+                    <span>🎮</span>
+                    <p>Console Node</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom-grid">
+            
+            <div>
+                <h3 class="module-title">Incoming Diagnostics Stream</h3>
+                <div class="stream-stack">
+                    <div class="stream-row">
+                        <div class="stream-meta">
+                            <span class="type-pill">Laptop</span>
+                            <span>Static shorts following hardware power surge</span>
+                        </div>
+                        <span style="color: #f59e0b; font-weight: 600; font-size: 0.9rem;">Analyzing...</span>
                     </div>
-                    <div class="glass-card">
-                        <div class="card-lbl">Diagnostics Solved</div>
-                        <div class="card-num">142</div>
-                    </div>
-                    <div class="glass-card">
-                        <div class="card-lbl">Avg. Repair Time</div>
-                        <div class="card-num" style="color: var(--accent-cyan)">34m</div>
+                    <div class="stream-row">
+                        <div class="stream-meta">
+                            <span class="type-pill">Smartphone</span>
+                            <span>Boot loop sequence triggered after battery drain</span>
+                        </div>
+                        <span style="color: #10b981; font-weight: 600; font-size: 0.9rem;">Ready</span>
                     </div>
                 </div>
 
-                <div class="hardware-canvas">
-                    <img src="https://i.ibb.co/Vv3Y7wG/laptop-mock.png" alt="Laptop" class="floating-device device-laptop" onerror="this.src='https://images.unsplash.com/photo-1593642632823-8f785ba67e45?auto=format&fit=crop&w=300&q=80'">
-                    <img src="https://i.ibb.co/mSRfWwM/phone-mock.png" alt="Smartphone" class="floating-device device-phone" onerror="this.src='https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=200&q=80'">
-                    <img src="https://i.ibb.co/6wX2mXY/console-mock.png" alt="Console" class="floating-device device-console" onerror="this.src='https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?auto=format&fit=crop&w=300&q=80'">
+                <div class="faq-box">
+                    <h3 class="module-title">Frequently Asked Questions</h3>
+                    <div class="faq-card">
+                        <button class="faq-btn" onclick="toggleAccordion(this)">What is the typical diagnostic review period?</button>
+                        <div class="faq-panel">
+                            <p>Standard electronic diagnostic procedures complete automatically within 34 minutes of digital telemetry parsing onto our logging queues.</p>
+                        </div>
+                    </div>
+                    <div class="faq-card">
+                        <button class="faq-btn" onclick="toggleAccordion(this)">How secure is my telemetry file upload data?</button>
+                        <div class="faq-panel">
+                            <p>All device imagery and reported error detail scripts are encrypted from the client terminal using localized end-to-end security protocols.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="dashboard-modules">
-                
-                <div class="module-block">
-                    <h3>Incoming Diagnostics Stream</h3>
-                    <div class="stream-box">
-                        <div class="stream-item">
-                            <div><span class="dev-badge">Laptop</span>Static shorts following power surge</div>
-                            <span style="color: #f59e0b; font-weight:500;">Analyzing</span>
-                        </div>
-                        <div class="stream-item">
-                            <div><span class="dev-badge">Smartphone</span>Boot loop sequence error configuration</div>
-                            <span style="color: #10b981; font-weight:500;">Ready</span>
-                        </div>
+            <div>
+                <h3 class="module-title">User Gate Access</h3>
+                <div class="glass-card auth-container">
+                    <div class="auth-nav">
+                        <button class="auth-tab active" onclick="switchAuth(this, 'register')">Create Account</button>
+                        <button class="auth-tab" onclick="switchAuth(this, 'login')">Sign In</button>
                     </div>
-
-                    <h3 style="margin-top: 1rem;">Frequently Asked Questions</h3>
-                    <div class="faq-stack">
-                        <div class="faq-item">
-                            <button class="faq-trigger" onclick="toggleFaq(this)">What is the typical diagnostic review period?</button>
-                            <div class="faq-content">
-                                <p>Standard diagnostics complete autonomously within 34 minutes of digital packet analysis and entry logs logging onto the stream array.</p>
-                            </div>
-                        </div>
-                        <div class="faq-item">
-                            <button class="faq-trigger" onclick="toggleFaq(this)">How secure is my telemetry file upload data?</button>
-                            <div class="faq-content">
-                                <p>All data and graphic diagnostic uploads process directly across secure localized end-to-end cloud infrastructure parameters natively monitored safely.</p>
-                            </div>
-                        </div>
+                    <div class="input-group" id="auth-inputs">
+                        <input type="text" placeholder="Username ID token" class="premium-input">
+                        <input type="email" placeholder="Secure Email link address" class="premium-input">
+                        <input type="password" placeholder="Account Security Key code" class="premium-input">
                     </div>
+                    <button class="premium-btn" id="action-btn">Create Account</button>
                 </div>
-
-                <div class="module-block">
-                    <h3>User Gate Access</h3>
-                    <div class="glass-card auth-widget">
-                        <div class="auth-tabs">
-                            <button class="tab-btn active" onclick="switchAuthTab(this, 'register')">Create Account</button>
-                            <button class="tab-btn" onclick="switchAuthTab(this, 'login')">Sign In</button>
-                        </div>
-                        <div id="auth-fields" style="display: flex; flex-direction: column; gap: 0.75rem;">
-                            <input type="text" placeholder="Username ID token" class="input-box">
-                            <input type="email" placeholder="Secure Email link address" class="input-box">
-                            <input type="password" placeholder="Account Security Key code" class="input-box">
-                        </div>
-                        <button class="btn-action" id="auth-submit-btn">Execute Secure Registration</button>
-                    </div>
-                </div>
-
             </div>
 
         </div>
+
     </main>
 
     <script>
-        const scene = document.getElementById('scene-canvas');
-        const container = document.querySelector('.main-content');
-
-        // Elegant Mouse-tracking Smooth 3D Gyro Perspective Math
-        container.addEventListener('mousemove', (e) => {
-            const bound = container.getBoundingClientRect();
-            const mouseX = e.clientX - bound.left - (bound.width / 2);
-            const mouseY = e.clientY - bound.top - (bound.height / 2);
+        // Interactive Accordion Controller
+        function toggleAccordion(element) {
+            const card = element.parentElement;
+            const panel = element.nextElementSibling;
             
-            // Subtle, premium 3D tilt tracking boundaries 
-            const rotX = -(mouseY / bound.height) * 8;
-            const rotY = (mouseX / bound.width) * 8;
-
-            scene.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
-        });
-
-        container.addEventListener('mouseleave', () => {
-            scene.style.transform = 'rotateX(0deg) rotateY(0deg)';
-        });
-
-        // Interactive Accordion Controller logic
-        function toggleFaq(btn) {
-            const item = btn.parentElement;
-            const content = btn.nextElementSibling;
-            
-            if(item.classList.contains('open')) {
-                item.classList.remove('open');
-                content.style.maxHeight = null;
+            if (card.classList.contains('open')) {
+                card.classList.remove('open');
+                panel.style.maxHeight = null;
             } else {
-                // Close other opened items
-                document.querySelectorAll('.faq-item').forEach(el => {
-                    el.classList.remove('open');
-                    el.querySelector('.faq-content').style.maxHeight = null;
+                document.querySelectorAll('.faq-card').forEach(c => {
+                    c.classList.remove('open');
+                    c.querySelector('.faq-panel').style.maxHeight = null;
                 });
-                item.classList.add('open');
-                content.style.maxHeight = content.scrollHeight + "px";
+                card.classList.add('open');
+                panel.style.maxHeight = panel.scrollHeight + "px";
             }
         }
 
-        // Functional Tab Matrix Switcher 
-        function switchAuthTab(btn, mode) {
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+        // Auth Form Switch Tab Setup
+        function switchAuth(element, state) {
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            element.classList.add('active');
             
-            const fieldsBlock = document.getElementById('auth-fields');
-            const submitBtn = document.getElementById('auth-submit-btn');
+            const inputContainer = document.getElementById('auth-inputs');
+            const submitBtn = document.getElementById('action-btn');
             
-            if(mode === 'login') {
-                fieldsBlock.innerHTML = `
-                    <input type="email" placeholder="Secure Email link address" class="input-box">
-                    <input type="password" placeholder="Account Security Key code" class="input-box">
+            if (state === 'login') {
+                inputContainer.innerHTML = `
+                    <input type="email" placeholder="Secure Email link address" class="premium-input">
+                    <input type="password" placeholder="Account Security Key code" class="premium-input">
                 `;
                 submitBtn.innerText = "Authorize System Login";
             } else {
-                fieldsBlock.innerHTML = `
-                    <input type="text" placeholder="Username ID token" class="input-box">
-                    <input type="email" placeholder="Secure Email link address" class="input-box">
-                    <input type="password" placeholder="Account Security Key code" class="input-box">
+                inputContainer.innerHTML = `
+                    <input type="text" placeholder="Username ID token" class="premium-input">
+                    <input type="email" placeholder="Secure Email link address" class="premium-input">
+                    <input type="password" placeholder="Account Security Key code" class="premium-input">
                 `;
-                submitBtn.innerText = "Execute Secure Registration";
+                submitBtn.innerText = "Create Account";
             }
         }
     </script>
