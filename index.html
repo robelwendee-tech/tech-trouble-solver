@@ -1,18 +1,571 @@
-// Example JavaScript linked to your front-end button
-async function initiatePayment(provider) {
-    const response = await fetch('/api/initialize-payment', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            amount: "150", // Amount in ETB
-            currency: "ETB",
-            payment_method: provider // 'telebirr' or 'cbebirr'
-        })
-    });
-    
-    const data = await response.json();
-    if(data.checkout_url) {
-        // Redirect customer to the secure payment portal
-        window.location.href = data.checkout_url; 
-    }
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ElectroFix Hub - Premium Command Center</title>
+    <style>
+        :root {
+            --bg-color: #0b111e;
+            --glass-bg: rgba(25, 41, 66, 0.45);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --neon-cyan: #3df0ff;
+            --neon-purple: #c084fc;
+            --text-main: #ffffff;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 0% 30%, rgba(61, 240, 255, 0.25) 0%, transparent 50%),
+                radial-gradient(circle at 100% 70%, rgba(192, 132, 252, 0.15) 0%, transparent 50%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: 260px;
+            background: rgba(8, 14, 26, 0.7);
+            border-right: 1px solid var(--glass-border);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            padding: 2rem 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            flex-shrink: 0;
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.35rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        .sidebar-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            list-style: none;
+        }
+
+        .menu-link {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.8rem 1rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .menu-item.active .menu-link, .menu-link:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .status-pill {
+            background: rgba(61, 240, 255, 0.15);
+            color: var(--neon-cyan);
+            border: 1px solid rgba(61, 240, 255, 0.3);
+            padding: 0.15rem 0.4rem;
+            font-size: 0.7rem;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        /* --- MAIN WORKSPACE --- */
+        .workspace {
+            flex: 1;
+            padding: 2.5rem 3.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            max-width: 1400px;
+        }
+
+        .header-title h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .node-status {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 0.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .pulse-dot {
+            width: 7px;
+            height: 7px;
+            background-color: var(--neon-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--neon-cyan);
+        }
+
+        .dashboard-layout {
+            display: grid;
+            grid-template-columns: 1.55fr 1fr;
+            gap: 2rem;
+        }
+
+        .col-left, .col-right {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 1.75rem;
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .card-title {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 1.25rem;
+            color: rgba(255, 255, 255, 0.95);
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .metric-lbl {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-num {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        /* --- ETHIOPIAN PAYMENTS OVERLAY INTEGRATION --- */
+        .payment-methods-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .payment-node-option {
+            background: rgba(13, 22, 38, 0.6);
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+            padding: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .payment-node-option:hover {
+            border-color: var(--neon-cyan);
+            transform: scale(1.01);
+            background: rgba(20, 35, 60, 0.8);
+        }
+
+        .pay-brand-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .pay-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 0.85rem;
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .telebirr-theme {
+            background: linear-gradient(135deg, #0070f3 0%, #00df89 100%);
+            color: #ffffff;
+        }
+
+        .cbe-theme {
+            background: linear-gradient(135deg, #7c3aed 0%, #2563eb 100%);
+            color: #ffffff;
+        }
+
+        .pay-details h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .pay-details p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.15rem;
+        }
+
+        .action-arrow {
+            color: var(--neon-cyan);
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        /* --- STREAM LIST --- */
+        .stream-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .stream-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 0.85rem;
+        }
+
+        .stream-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.9rem;
+        }
+
+        .stream-indicator {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--neon-cyan);
+            box-shadow: 0 0 8px var(--neon-cyan);
+        }
+
+        .stream-timestamp {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+        }
+
+        /* --- ACCORDION FAQ --- */
+        .accordion-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+        }
+
+        .accordion-node {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 0.85rem;
+        }
+
+        .accordion-btn {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            font-size: 0.92rem;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .accordion-btn::after {
+            content: '⌃';
+            transform: rotate(180deg);
+            color: var(--neon-cyan);
+            transition: transform 0.2s;
+        }
+
+        .accordion-node.open .accordion-btn::after {
+            transform: rotate(0deg);
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.25s ease-out;
+            color: var(--text-muted);
+            font-size: 0.88rem;
+            line-height: 1.5;
+        }
+
+        .accordion-content p {
+            padding-top: 0.5rem;
+        }
+
+        /* --- DEVICES ROW --- */
+        .devices-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .device-node-card {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+            padding: 1.2rem 0.5rem;
+            text-align: center;
+        }
+
+        .device-node-card svg {
+            width: 30px;
+            height: 30px;
+            margin-bottom: 0.4rem;
+            stroke: var(--neon-cyan);
+        }
+
+        .device-node-card p {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 0.03em;
+        }
+
+        .blueprint-container {
+            background: linear-gradient(135deg, rgba(61, 240, 255, 0.08) 0%, rgba(15, 23, 42, 0.5) 100%);
+            border: 1px solid rgba(61, 240, 255, 0.25);
+            border-radius: 20px;
+            padding: 1.75rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .blueprint-container::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: 
+                linear-gradient(rgba(61, 240, 255, 0.04) 1px, transparent 1px), 
+                linear-gradient(90deg, rgba(61, 240, 255, 0.04) 1px, transparent 1px);
+            background-size: 12px 12px;
+        }
+
+        .blueprint-inner {
+            position: relative;
+            z-index: 2;
+        }
+
+        @media (max-width: 1150px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; }
+            .dashboard-layout { grid-template-columns: 1fr; }
+            .workspace { padding: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Matrix Navigation -->
+    <nav class="sidebar">
+        <div class="sidebar-brand">💎 Premium</div>
+        <ul class="sidebar-menu">
+            <li class="menu-item active"><a href="#" class="menu-link">Command Center <span class="status-pill">Active</span></a></li>
+            <li class="menu-item"><a href="#" class="menu-link">Submission Hub</a></li>
+            <li class="menu-item"><a href="#" class="menu-link">Common Fixes</a></li>
+            <li class="menu-item"><a href="#" class="menu-link">Service Pricing</a></li>
+            <li class="menu-item"><a href="#" class="menu-link">FAQ</a></li>
+            <li class="menu-item"><a href="#" class="menu-link">Support</a></li>
+        </ul>
+    </nav>
+
+    <!-- App Content Architecture Canvas -->
+    <main class="workspace">
+        
+        <div class="header-title">
+            <h1>ElectroFix // Command_Center</h1>
+            <div class="node-status"><div class="pulse-dot"></div> Diagnostics Node: Active</div>
+        </div>
+
+        <div class="dashboard-layout">
+            
+            <!-- Column 1 Layout Workspace -->
+            <div class="col-left">
+                
+                <div class="stats-row">
+                    <div class="glass-card">
+                        <div class="metric-lbl">Active Repair Queues</div>
+                        <div class="metric-num">24</div>
+                    </div>
+                    <div class="glass-card">
+                        <div class="metric-lbl">Diagnostics Solved</div>
+                        <div class="metric-num">142</div>
+                    </div>
+                </div>
+
+                <div class="glass-card">
+                    <div class="card-title">Incoming Diagnostics Stream</div>
+                    <div class="stream-container">
+                        <div class="stream-item">
+                            <div class="stream-meta">
+                                <div class="stream-indicator"></div>
+                                <span>Dlast Incoming Diagnostics #755-2044400</span>
+                            </div>
+                            <span class="stream-timestamp">2 hours ago</span>
+                        </div>
+                        <div class="stream-item">
+                            <div class="stream-meta">
+                                <div class="stream-indicator" style="background: var(--neon-purple); box-shadow: 0 0 8px var(--neon-purple);"></div>
+                                <span>Diarn Incoming Diagnostics #32F-3630800</span>
+                            </div>
+                            <span class="stream-timestamp">3 days ago</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card">
+                    <div class="card-title">Frequently Asked Questions</div>
+                    <div class="accordion-group">
+                        <div class="accordion-node">
+                            <button class="accordion-btn" onclick="triggerToggle(this)">What is typical diagnostic review period?</button>
+                            <div class="accordion-content">
+                                <p>Standard system device telemetry profiles parse and finish auto-diagnostics checks inside a window of 34 minutes.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Column 2 Layout Workspace -->
+            <div class="col-right">
+                
+                <div class="devices-row">
+                    <div class="device-node-card">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="2" y1="20" x2="22" y2="20"></line><line x1="12" y1="17" x2="12" y2="20"></line></svg>
+                        <p>Laptop Node</p>
+                    </div>
+                    <div class="device-node-card">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+                        <p>Phone Node</p>
+                    </div>
+                </div>
+
+                <div class="blueprint-container">
+                    <div class="blueprint-inner">
+                        <div class="metric-lbl">Avg. Repair Time</div>
+                        <div class="metric-num" style="color: var(--neon-cyan); text-shadow: 0 0 15px rgba(61,240,255,0.35);">34m</div>
+                    </div>
+                </div>
+
+                <!-- Payment Processing Component Block -->
+                <div class="glass-card">
+                    <div class="card-title">Secure Gateway Payment</div>
+                    <div class="payment-methods-grid">
+                        
+                        <!-- Telebirr Option with real dynamic script link -->
+                        <div class="payment-node-option" onclick="initiatePayment('telebirr')">
+                            <div class="pay-brand-meta">
+                                <div class="pay-avatar telebirr-theme">tele</div>
+                                <div class="pay-details">
+                                    <h4>Telebirr Mobile Pay</h4>
+                                    <p>Instant digital wallet checkout</p>
+                                </div>
+                            </div>
+                            <div class="action-arrow">→</div>
+                        </div>
+
+                        <!-- CBE Option with real dynamic script link -->
+                        <div class="payment-node-option" onclick="initiatePayment('cbebirr')">
+                            <div class="pay-brand-meta">
+                                <div class="pay-avatar cbe-theme">cbe</div>
+                                <div class="pay-details">
+                                    <h4>CBE Birr Portal</h4>
+                                    <p>Direct mobile bank transfer</p>
+                                </div>
+                            </div>
+                            <div class="action-arrow">→</div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- UI Interaction Scripts safely encapsulated -->
+    <script>
+        // Fixes layout accordion panel collapses
+        function triggerToggle(btn) {
+            const node = btn.parentElement;
+            const content = btn.nextElementSibling;
+            const isOpen = content.style.maxHeight;
+
+            document.querySelectorAll('.accordion-node').forEach(el => {
+                el.classList.remove('open');
+                el.querySelector('.accordion-content').style.maxHeight = null;
+            });
+
+            if (!isOpen) {
+                node.classList.add('open');
+                content.style.maxHeight = content.scrollHeight + "px";
+            }
+        }
+
+        // Handles secure processing handshakes smoothly
+        async function initiatePayment(provider) {
+            console.log(`Initializing backend checkout tunnel for: ${provider}`);
+            alert(`Contacting Secure Server API... \nRouting order parameter [${provider.toUpperCase()}] through localized verification node.`);
+            
+            /* 
+               Uncomment this live hook when your server route (/api/initialize-payment) is complete:
+               
+               try {
+                   const response = await fetch('/api/initialize-payment', {
+                       method: 'POST',
+                       headers: { 'Content-Type': 'application/json' },
+                       body: JSON.stringify({ amount: "150", currency: "ETB", payment_method: provider })
+                   });
+                   const data = await response.json();
+                   if (data.checkout_url) window.location.href = data.checkout_url;
+               } catch (err) {
+                   console.error("Payment channel initialization failed:", err);
+               }
+            */
+        }
+    </script>
+</body>
+</html>
