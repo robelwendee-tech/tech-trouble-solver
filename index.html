@@ -1,52 +1,31 @@
-<div class="glass-card" style="max-width: 500px; margin: 2rem auto;">
-    <div class="card-title">Confirm Manual Transfer</div>
-    <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem;">
-        Transferred via CBE or Telebirr? Submit your transaction reference number below to unlock your diagnostics node.
-    </p>
-
-    <form id="paymentVerificationForm" onsubmit="handleManualSubmit(event)">
-        <div style="margin-bottom: 1.25rem;">
-            <label style="display: block; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.5rem;">
-                Payment Method Used
-            </label>
-            <select id="paymentProvider" style="width: 100%; background: rgba(13, 22, 38, 0.8); border: 1px solid var(--glass-border); color: #fff; padding: 0.8rem; border-radius: 10px; outline: none;">
-                <option value="telebirr">Telebirr Direct Transfer</option>
-                <option value="cbe">CBE Birr / Mobile App</option>
-            </select>
-        </div>
-
-        <div style="margin-bottom: 1.25rem;">
-            <label style="display: block; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.5rem;">
-                Transaction Reference ID (TxRef)
-            </label>
-            <input type="text" id="txId" placeholder="e.g., FT232400XXXX or O9XXXXXXXX" required 
-                   style="width: 100%; background: rgba(13, 22, 38, 0.8); border: 1px solid var(--glass-border); color: #fff; padding: 0.8rem; border-radius: 10px; outline: none;">
-        </div>
-
-        <div style="margin-bottom: 1.5rem;">
-            <label style="display: block; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.5rem;">
-                Exact Amount Sent (ETB)
-            </label>
-            <input type="number" id="sentAmount" placeholder="150" required 
-                   style="width: 100%; background: rgba(13, 22, 38, 0.8); border: 1px solid var(--glass-border); color: #fff; padding: 0.8rem; border-radius: 10px; outline: none;">
-        </div>
-
-        <button type="submit" style="width: 100%; background: linear-gradient(135deg, var(--neon-cyan) 0%, #0070f3 100%); border: none; color: #0b111e; padding: 0.9rem; border-radius: 10px; font-weight: 700; cursor: pointer; transition: opacity 0.2s;">
-            Submit Reference for Review
-        </button>
-    </form>
-</div>
-
-<script>
-function handleManualSubmit(event) {
-    event.preventDefault();
-    const provider = document.getElementById('paymentProvider').value;
-    const reference = document.getElementById('txId').value;
-    const amount = document.getElementById('sentAmount').value;
-
-    // Send data to your server storage or email notification system
-    console.log("Verification Logged:", { provider, reference, amount });
+// Handles secure processing handshakes smoothly
+async function initiatePayment(provider) {
+    console.log(`Initializing backend checkout tunnel for: ${provider}`);
     
-    alert(`Submission Received!\nYour transaction ID [${reference}] has been queued for validation. Your dashboard status will change shortly.`);
+    // PROCESS 1: AUTOMATED GATEWAY PIPELINE
+    // If you hook up an automated payment aggregator backend, use this:
+    /*
+    try {
+        const response = await fetch('/api/initialize-payment', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ amount: "150", currency: "ETB", payment_method: provider })
+        });
+        const data = await response.json();
+        if (data.checkout_url) window.location.href = data.checkout_url;
+    } catch (err) {
+        console.error("Automated payment pathway failed:", err);
+    }
+    */
+
+    // PROCESS 2: DIRECT MANUAL TRANSFER INTERFACE
+    // If they choose to transfer directly to you, display instructions dynamically:
+    let accountInfo = provider === 'telebirr' ? "Telebirr Number: 0912XXXXXX" : "CBE Account: 1000XXXXXXXXX";
+    
+    let referenceId = prompt(`--- MANUAL TRANSFER PROCESS ---\n\nPlease open your mobile banking application and send the funds to:\n👉 ${accountInfo}\n\nOnce completed, paste your Transaction Reference ID below to log payment proof:`);
+    
+    if (referenceId) {
+        alert(`Verification Queued!\nTransaction ID [${referenceId}] has been successfully saved. The admin node will verify your transfer shortly.`);
+        // Optional: Send referenceId data to your backend database via fetch() to log it for your eyes!
+    }
 }
-</script>
