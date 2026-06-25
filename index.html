@@ -13,93 +13,35 @@
             --neon-purple: #c084fc;
             --text-main: #ffffff;
             --text-muted: #94a3b8;
-            --success-green: #00df89;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: -apple-system, sans-serif;
         }
 
         body {
             background-color: var(--bg-color);
-            background-image: 
-                radial-gradient(circle at 0% 30%, rgba(61, 240, 255, 0.2) 0%, transparent 50%),
-                radial-gradient(circle at 100% 70%, rgba(192, 132, 252, 0.1) 0%, transparent 50%);
-            background-attachment: fixed;
             color: var(--text-main);
             min-height: 100vh;
             display: flex;
+            padding: 2rem;
         }
 
-        /* --- SIDEBAR --- */
-        .sidebar {
-            width: 260px;
-            background: rgba(8, 14, 26, 0.6);
-            border-right: 1px solid var(--glass-border);
-            backdrop-filter: blur(20px);
-            padding: 2rem 1.25rem;
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-        }
-
-        .sidebar-brand {
-            font-size: 1.35rem;
-            font-weight: 700;
-            letter-spacing: 0.05em;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .sidebar-menu {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            list-style: none;
-        }
-
-        .menu-link {
-            display: block;
-            padding: 0.8rem 1rem;
-            color: var(--text-muted);
-            text-decoration: none;
-            border-radius: 10px;
-            font-size: 0.9rem;
-            transition: all 0.2s;
-        }
-
-        .menu-item.active .menu-link, .menu-link:hover {
-            color: #ffffff;
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        /* --- MAIN WORKSPACE --- */
         .workspace {
             flex: 1;
-            padding: 2.5rem 3.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
             display: flex;
             flex-direction: column;
             gap: 2rem;
-        }
-
-        .header-title h1 {
-            font-size: 2.2rem;
-            font-weight: 700;
         }
 
         .dashboard-layout {
             display: grid;
-            grid-template-columns: 1.6fr 1fr;
-            gap: 2rem;
-        }
-
-        .col-left, .col-right {
-            display: flex;
-            flex-direction: column;
+            grid-template-columns: 1.5fr 1fr;
             gap: 2rem;
         }
 
@@ -109,57 +51,19 @@
             border-radius: 20px;
             padding: 1.75rem;
             backdrop-filter: blur(20px);
-            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.2);
         }
 
         .card-title {
-            font-size: 1.05rem;
+            font-size: 1.1rem;
             font-weight: 600;
             margin-bottom: 1.25rem;
         }
 
-        .stats-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-        }
-
-        .metric-lbl {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            margin-bottom: 0.5rem;
-        }
-
-        .metric-num {
-            font-size: 3rem;
-            font-weight: 700;
-        }
-
-        /* --- DEVICE NODES --- */
-        .devices-row {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-        }
-
-        .device-node-card {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--glass-border);
-            border-radius: 14px;
-            padding: 1.5rem 0.5rem;
-            text-align: center;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-        }
-
-        /* --- INCOMING STREAM LOGS --- */
         .stream-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             padding: 1rem 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .stream-indicator {
@@ -167,12 +71,9 @@
             height: 8px;
             border-radius: 50%;
             background: #eab308;
-            box-shadow: 0 0 8px #eab308;
             display: inline-block;
-            margin-right: 0.5rem;
         }
 
-        /* --- PAYMENT GRAPHICS BUTTONS --- */
         .payment-methods-grid {
             display: flex;
             flex-direction: column;
@@ -193,31 +94,9 @@
 
         .payment-node-option:hover {
             border-color: var(--neon-cyan);
-            background: rgba(20, 35, 60, 0.7);
         }
 
-        .pay-brand-meta {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .pay-avatar {
-            width: 44px;
-            height: 44px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-        }
-
-        .telebirr-theme { background: linear-gradient(135deg, #0070f3, #00df89); color: white; }
-        .cbe-theme { background: linear-gradient(135deg, #7c3aed, #2563eb); color: white; }
-
-        /* --- IN-APP PROCESS INPUT PANEL (NO MORE WINDOW ALERTS) --- */
+        /* IN-PAGE INPUT INTERFACE */
         .payment-process-panel {
             display: none;
             margin-top: 1.5rem;
@@ -238,10 +117,6 @@
             line-height: 1.5;
         }
 
-        .process-instructions strong {
-            color: #ffffff;
-        }
-
         .process-input-container {
             display: flex;
             gap: 0.5rem;
@@ -254,12 +129,7 @@
             border-radius: 8px;
             padding: 0.7rem;
             color: #ffffff;
-            font-size: 0.9rem;
             outline: none;
-        }
-
-        .process-input:focus {
-            border-color: var(--neon-cyan);
         }
 
         .process-submit-btn {
@@ -271,127 +141,92 @@
             font-weight: 700;
             cursor: pointer;
         }
+
+        .error-msg {
+            color: #ff4a4a;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
     </style>
 </head>
 <body>
 
-    <nav class="sidebar">
-        <div class="sidebar-brand">💎 Premium</div>
-        <ul class="sidebar-menu">
-            <li class="menu-item active"><a href="#" class="menu-link">Command Center</a></li>
-            <li class="menu-item"><a href="#" class="menu-link">Submission Hub</a></li>
-            <li class="menu-item"><a href="#" class="menu-link">Common Fixes</a></li>
-        </ul>
-    </nav>
-
-    <main class="workspace">
-        <div class="header-title">
-            <h1>ElectroFix // Command_Center</h1>
-        </div>
+    <div class="workspace">
+        <h1>ElectroFix // Command_Center</h1>
 
         <div class="dashboard-layout">
-            <div class="col-left">
-                <div class="stats-row">
-                    <div class="glass-card"><div class="metric-lbl">Active Repair Queues</div><div class="metric-num">24</div></div>
-                    <div class="glass-card"><div class="metric-lbl">Diagnostics Solved</div><div class="metric-num">142</div></div>
-                </div>
-
-                <div class="glass-card">
-                    <div class="card-title">Incoming Diagnostics Stream</div>
-                    <div class="stream-item">
-                        <div>
-                            <span id="streamDot" class="stream-indicator"></span>
-                            <span id="streamText">Dlast Incoming Diagnostics #76S-2044400 — <strong>Awaiting Service Fee</strong></span>
-                        </div>
-                    </div>
+            <div class="glass-card">
+                <div class="card-title">Incoming Diagnostics Stream</div>
+                <div class="stream-item">
+                    <span id="streamDot" class="stream-indicator"></span>
+                    <span id="streamText">Diagnostics #76S — <strong>Awaiting Service Fee</strong></span>
                 </div>
             </div>
 
-            <div class="col-right">
-                <div class="devices-row">
-                    <div class="device-node-card">💻 Laptop Node</div>
-                    <div class="device-node-card">📱 Phone Node</div>
-                    <div class="device-node-card">🎮 Console Node</div>
-                </div>
-
-                <div class="glass-card">
-                    <div class="card-title">Secure Gateway Payment</div>
-                    <div class="payment-methods-grid">
-                        
-                        <div class="payment-node-option" onclick="showProcess('Telebirr', '0912345678')">
-                            <div class="pay-brand-meta">
-                                <div class="pay-avatar telebirr-theme">tele</div>
-                                <div>
-                                    <h4>Telebirr Mobile Pay</h4>
-                                    <p>Instant digital wallet verification</p>
-                                </div>
-                            </div>
-                            <div>→</div>
+            <div class="glass-card">
+                <div class="card-title">Secure Gateway Payment</div>
+                <div class="payment-methods-grid">
+                    
+                    <div class="payment-node-option" onclick="showProcess('Telebirr', '0912345678')">
+                        <div>
+                            <h4>Telebirr Mobile Pay</h4>
+                            <p style="color: var(--text-muted); font-size: 0.8rem;">Submit transaction text code</p>
                         </div>
-
-                        <div class="payment-node-option" onclick="showProcess('CBE', '1000123456789')">
-                            <div class="pay-brand-meta">
-                                <div class="pay-avatar cbe-theme">cbe</div>
-                                <div>
-                                    <h4>CBE Birr Portal</h4>
-                                    <p>Direct mobile bank transfer code</p>
-                                </div>
-                            </div>
-                            <div>→</div>
-                        </div>
-
+                        <div>→</div>
                     </div>
 
-                    <div id="processArea" class="payment-process-panel">
-                        <div id="processInstructions" class="process-instructions"></div>
-                        <div class="process-input-container">
-                            <input type="text" id="transactionCodeInput" class="process-input" placeholder="Paste your transfer transaction code here...">
-                            <button class="process-submit-btn" onclick="submitTransactionCode()">Submit</button>
+                    <div class="payment-node-option" onclick="showProcess('CBE', '1000123456789')">
+                        <div>
+                            <h4>CBE Birr Portal</h4>
+                            <p style="color: var(--text-muted); font-size: 0.8rem;">Submit bank transfer code</p>
                         </div>
+                        <div>→</div>
                     </div>
 
                 </div>
+
+                <div id="processArea" class="payment-process-panel">
+                    <div id="processInstructions" class="process-instructions"></div>
+                    <div class="process-input-container">
+                        <input type="text" id="transactionCodeInput" class="process-input" placeholder="Paste code here...">
+                        <button class="process-submit-btn" onclick="submitTransactionCode()">Submit</button>
+                    </div>
+                    <div id="errorField" class="error-msg">Please type a code first.</div>
+                </div>
+
             </div>
         </div>
-    </main>
+    </div>
 
     <script>
         let chosenMethod = '';
 
-        // This replaces the alert popup box completely and shows the field right inside the card
         function showProcess(method, accountDetails) {
             chosenMethod = method;
-            const processArea = document.getElementById('processArea');
-            const instructions = document.getElementById('processInstructions');
-            
-            processArea.classList.add('active');
+            document.getElementById('errorField').style.display = 'none';
+            document.getElementById('processArea').classList.add('active');
             
             if(method === 'Telebirr') {
-                instructions.innerHTML = `Please transfer your payment via Telebirr to: <strong>${accountDetails}</strong>.<br><br>Once done, paste the transaction reference code from your confirmation text below:`;
+                document.getElementById('processInstructions').innerHTML = `Transfer to Telebirr: <strong>${accountDetails}</strong>. Then enter your confirmation transaction text code below:`;
             } else {
-                instructions.innerHTML = `Please transfer your payment via CBE App to account: <strong>${accountDetails}</strong>.<br><br>Once done, paste your <strong>Txn Ref / Code</strong> below:`;
+                document.getElementById('processInstructions').innerHTML = `Transfer to CBE Account: <strong>${accountDetails}</strong>. Then enter your Txn Ref code below:`;
             }
-
-            document.getElementById('transactionCodeInput').focus();
         }
 
-        // Updates your dashboard data instantly upon submission code entry
         function submitTransactionCode() {
             const enteredCode = document.getElementById('transactionCodeInput').value.trim();
             
             if (!enteredCode) {
-                return; // Blocks submission if empty
+                document.getElementById('errorField').style.display = 'block';
+                return;
             }
 
-            const dot = document.getElementById('streamDot');
-            const text = document.getElementById('streamText');
+            // Directly rewrite the layout contents on the screen
+            document.getElementById('streamDot').style.background = "#c084fc";
+            document.getElementById('streamText').innerHTML = `Diagnostics #76S — <span style="color: #c084fc">Verifying ${chosenMethod} Code: <strong>${enteredCode}</strong></span>`;
 
-            // Change stream indicators dynamically on screen
-            dot.style.background = "var(--neon-purple)";
-            dot.style.boxShadow = "0 0 10px var(--neon-purple)";
-            text.innerHTML = `Dlast Diagnostics #76S-2044400 — <span style="color: var(--neon-purple)">Verifying ${chosenMethod} Code: <strong>${enteredCode}</strong></span>`;
-
-            // Clear configuration out
+            // Hide entry field smoothly
             document.getElementById('transactionCodeInput').value = '';
             document.getElementById('processArea').classList.remove('active');
         }
